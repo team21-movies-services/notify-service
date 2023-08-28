@@ -12,6 +12,8 @@ python = "^3.11"
 fastapi = "^0.103.0"
 pydantic = "^2.3.0"
 pydantic-settings = "^2.0.3"
+uvicorn = "^0.23.2"
+orjson = "^3.9.5"
 
 
 [build-system]
