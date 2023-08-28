@@ -14,12 +14,3 @@ per-file-ignores =
         F401
         # unable to detect undefined names
         F403
-    performance_tests/utils.py:
-        # prints ignore
-        T201
-    performance_tests/*:
-        # hardcoded password
-        S106
-        # possible sql injection
-        S608
-    *tests/*: S101, C812
