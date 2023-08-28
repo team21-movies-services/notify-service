@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+
+  notify-service-nginx:
+    build:
+      context: .
+      dockerfile: infra/nginx/Dockerfile
+    container_name: notify-service-nginx
+    restart: unless-stopped
+    networks:
+      - notify-service-network
+    depends_on:
+      - notify-service-api
+
+  notify-service-api:
+    container_name: notify-service-api
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: infra/backend/Dockerfile
+    networks:
+      - notify-service-network
+    env_file:
+      - ./src/.env
+
+networks:
+  notify-service-network:
+    name: notify-service-network
+    external: true
