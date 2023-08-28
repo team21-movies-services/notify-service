@@ -4,7 +4,7 @@
 import multiprocessing
 import os
 
-loglevel = os.environ.get('GUNICORN_LOG_LEVEL', 'info')
+loglevel = os.environ.get("GUNICORN_LOG_LEVEL", "info")
 errorlog = "-"
 accesslog = "-"
 
@@ -15,4 +15,4 @@ workers = multiprocessing.cpu_count() * 2 + 1
 timeout = 3 * 60  # 3 minutes
 keepalive = 24 * 60 * 60  # 1 day
 
-worker_class = 'uvicorn.workers.UvicornWorker'
+worker_class = "uvicorn.workers.UvicornWorker"
