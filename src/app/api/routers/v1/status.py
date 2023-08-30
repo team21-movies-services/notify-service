@@ -1,6 +1,7 @@
 import logging
 
 from fastapi import APIRouter, Depends, status
+
 from schemas.response.status import StatusResponse
 from services.status import StatusServiceABC
 

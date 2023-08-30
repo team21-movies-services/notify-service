@@ -1,11 +1,12 @@
 from logging import config as logging_config
 
+from fastapi import FastAPI
+from fastapi.responses import ORJSONResponse
+
 from api.routers.main import setup_routers
 from core.config import Settings
 from core.logger import LOGGING
 from dependencies.main import setup_dependencies
-from fastapi import FastAPI
-from fastapi.responses import ORJSONResponse
 from middleware.main import setup_middleware
 from providers.main import setup_providers
 

@@ -1,7 +1,8 @@
 import logging
 
-from core.config import Settings
 from fastapi import FastAPI
+
+from core.config import Settings
 
 logger = logging.getLogger(__name__)
 
