@@ -1,6 +1,6 @@
 import os
 
-from pydantic import Field, AnyUrl
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
