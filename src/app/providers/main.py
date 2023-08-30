@@ -2,7 +2,6 @@ import logging
 
 from core.config import Settings
 from fastapi import FastAPI
-
 from providers.celery_provider import CeleryProvider
 
 logger = logging.getLogger(__name__)

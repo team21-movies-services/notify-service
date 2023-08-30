@@ -1,8 +1,7 @@
-from fastapi import FastAPI
-
-from providers import BaseProvider
-from core.config import Settings
 from celery import Celery
+from core.config import Settings
+from fastapi import FastAPI
+from providers import BaseProvider
 
 
 class CeleryProvider(BaseProvider):

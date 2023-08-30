@@ -1,4 +1,5 @@
 import time
+
 from celery import Celery
 
 time.sleep(15)
