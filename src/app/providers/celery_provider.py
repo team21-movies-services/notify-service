@@ -1,6 +1,7 @@
 from celery import Celery
-from core.config import Settings
 from fastapi import FastAPI
+
+from core.config import Settings
 from providers import BaseProvider
 
 
