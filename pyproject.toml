@@ -23,6 +23,8 @@ pydantic-settings = "^2.0.3"
 uvicorn = "^0.23.2"
 orjson = "^3.9.5"
 celery = "^5.3.1"
+sqladmin = "^0.14.1"
+itsdangerous = "^2.1.2"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^6.0.0"

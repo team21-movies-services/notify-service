@@ -138,3 +138,4 @@ movies_admin/static
 .vscode
 logs/nginx/*
 logs/ugc_service/*
+src/.DS_Store
