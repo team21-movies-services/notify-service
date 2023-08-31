@@ -15,5 +15,5 @@ class Notification(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
 
 
-class NotificationAdminView(ModelView, model=Notification):
+class NotificationAdminView(ModelView, model=Notification):  # type: ignore
     ...
