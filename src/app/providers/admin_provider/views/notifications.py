@@ -1,6 +1,7 @@
 from dataclasses import dataclass
+
 from sqladmin import ModelView
-from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 class Base(DeclarativeBase):

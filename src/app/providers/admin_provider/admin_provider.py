@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from sqladmin import Admin
 
-from providers import BaseProvider
 from core.config import AdminConfig
+from providers import BaseProvider
 from providers.admin_provider.views import NotificationAdminView
 
 
