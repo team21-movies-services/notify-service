@@ -25,10 +25,6 @@ class PostgresConfig(BaseSettings):
     def database_url(self):
         return f"postgresql+psycopg://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"
 
-    @property
-    def migration_database_url(self):
-        return f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"
-
 
 # Настройки Celery
 class CeleryConfig(BaseSettings):

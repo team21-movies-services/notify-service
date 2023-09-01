@@ -1,13 +1,13 @@
 import uuid
+from enum import StrEnum, auto
 
-import auto
-import StrEnum
 from sqlalchemy import PrimaryKeyConstraint, String
 from sqlalchemy.dialects.postgresql import ENUM, UUID
 from sqlalchemy.orm import Mapped
 
-from models.base import BaseModel, Column
+from models.base import BaseModel, Column, RestrictForeignKey
 from models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
+from models.template import Template
 
 
 class NotificationType(StrEnum):
@@ -26,9 +26,14 @@ class Notification(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):
     )
 
     event_name: Mapped[str] = Column(String(127), nullable=False, comment="Название события")
-    template_id: Mapped[uuid.UUID] = Column(UUID(as_uuid=True), nullable=False, comment="ID шаблона")
+    template_id: Mapped[uuid.UUID] = Column(
+        UUID(as_uuid=True),
+        RestrictForeignKey(Template.id),
+        nullable=False,
+        comment="ID шаблона",
+    )
     notification_type: Mapped[str] = Column(
-        ENUM(NotificationType, name="action_type"),
+        ENUM(NotificationType, name="notification_type"),
         nullable=False,
         comment="Типы нотификаций",
     )

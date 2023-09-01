@@ -4,8 +4,10 @@ from sqlalchemy import PrimaryKeyConstraint, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped
 
-from models.base import BaseModel, Column
+from models.base import BaseModel, Column, RestrictForeignKey
 from models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
+from models.sender import Sender
+from models.wrapper import Wrapper
 
 
 class Template(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):
@@ -24,5 +26,15 @@ class Template(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):
     body: Mapped[str] = Column(Text, nullable=False, comment="Тело шаблона")
     json_vars: Mapped[dict] = Column(JSONB, nullable=False, default='{}', comment="Переменные шаблона")
 
-    wrapper_id: Mapped[uuid.UUID] = Column(UUID(as_uuid=True), nullable=False, comment="ID враппера")
-    sender_id: Mapped[uuid.UUID] = Column(UUID(as_uuid=True), nullable=True, comment="ID отправителя")
+    wrapper_id: Mapped[uuid.UUID] = Column(
+        UUID(as_uuid=True),
+        RestrictForeignKey(Wrapper.id),
+        nullable=False,
+        comment="ID враппера",
+    )
+    sender_id: Mapped[uuid.UUID] = Column(
+        UUID(as_uuid=True),
+        RestrictForeignKey(Sender.id),
+        nullable=True,
+        comment="ID отправителя",
+    )
