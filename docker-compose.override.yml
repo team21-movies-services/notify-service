@@ -13,6 +13,22 @@ services:
     depends_on:
       - notify-service-api
 
+  notify-service-postgres:
+    image: postgres:13
+    container_name: notify-service-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - notify-service-network
+    env_file:
+      - ./.env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
   notify-service-api:
     container_name: notify-service-api
     restart: unless-stopped
@@ -28,3 +44,6 @@ networks:
   notify-service-network:
     name: notify-service-network
     external: true
+
+volumes:
+  db_data
