@@ -1,7 +1,7 @@
 import os
 
 from pydantic import Field, PostgresDsn
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 # Название проекта. Используется в Swagger-документации
@@ -29,11 +29,29 @@ class PostgresConfig(BaseSettings):
             port=str(self.port),
             path=f"/{self.db}",
         )
+      
+
+# Настройки Celery
+class CeleryConfig(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="CELERY_")
+    user: str = Field(default="guest")
+    password: str = Field(default="guest")
+    host: str = Field(default="notify-service-rabbitmq")
+    app_name: str = Field(default="notify")
+
+    @property
+    def broker(self) -> str:
+        return f"pyamqp://{self.user}:{self.password}@{self.host}"
+
+    @property
+    def backend(self) -> str:
+        return f"rpc://{self.user}:{self.password}@{self.host}"
 
 
 class Settings(BaseSettings):
     project: ProjectConfig = ProjectConfig()
     postgres: PostgresConfig = PostgresConfig()
+    celery: CeleryConfig = CeleryConfig()
 
 
 settings = Settings()

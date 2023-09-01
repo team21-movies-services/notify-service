@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  notify-service-worker:
+    build:
+      context: .
+      dockerfile: infra/celery/Dockerfile
+    depends_on:
+      - notify-service-rabbitmq
+    networks:
+      - notify-service-network
+    command: poetry run celery -A main worker --autoscale 10 --loglevel=info
+
+  notify-service-rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - 15672:15672
+    networks:
+      - notify-service-network
+
+  notify-service-flower:
+    image: mher/flower:0.9.7
+    environment:
+      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq
+      - FLOWER_PORT=8888
+    ports:
+      - 8888:8888
+    depends_on:
+      - notify-service-rabbitmq
+    networks:
+      - notify-service-network

@@ -1,8 +1,8 @@
 
-BASE_DOCKER_COMPOSES = -f docker-compose.yml -f docker-compose.override.yml
+BASE_DOCKER_COMPOSES = -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.celery.yml
 
 LOCAL_DOCKER_COMPOSES = -f docker-compose.local.yml \
-	-f docker-compose.override.yml
+	-f docker-compose.override.yml -f docker-compose.celery.yml
 
 .PHONY: help
 help: ## Help
