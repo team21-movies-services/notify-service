@@ -46,4 +46,4 @@ networks:
     external: true
 
 volumes:
-  db_data
+  db_data:

@@ -23,6 +23,8 @@ pydantic-settings = "^2.0.3"
 uvicorn = "^0.23.2"
 orjson = "^3.9.5"
 celery = "^5.3.1"
+sqlalchemy = "^2.0.20"
+psycopg = {extras = ["binary"], version = "^3.1.10"}
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^6.0.0"

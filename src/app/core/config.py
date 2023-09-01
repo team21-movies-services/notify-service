@@ -1,6 +1,6 @@
 import os
 
-from pydantic import Field, PostgresDsn
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -13,23 +13,22 @@ class ProjectConfig(BaseSettings):
 
 # Настройки PostgreSQL
 class PostgresConfig(BaseSettings):
-    host: str = Field(default='localhost', alias='POSTGRES_HOST')
-    port: int = Field(default=5432, alias='POSTGRES_HOST')
-    db: str = Field(default='tasks', alias='POSTGRES_DB')
-    user: str = Field(default='postgres', alias='POSTGRES_USER')
-    password: str = Field(default='postgres', alias='POSTGRES_PASSWORD')
+    model_config = SettingsConfigDict(env_prefix='postgres_')
+    host: str = Field(default='localhost')
+    port: int = Field(default=5432)
+    db: str = Field(default='notify_database')
+    user: str = Field(default='notify')
+    password: str = Field(default='notify')
+    echo_log: bool = Field(default=False)
 
     @property
-    def dsn(self) -> str:
-        return PostgresDsn.build(
-            scheme="postgresql+asyncpg",
-            user=self.user,
-            password=self.password,
-            host=self.host,
-            port=str(self.port),
-            path=f"/{self.db}",
-        )
-      
+    def database_url(self):
+        return f"postgresql+psycopg://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"
+
+    @property
+    def migration_database_url(self):
+        return f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"
+
 
 # Настройки Celery
 class CeleryConfig(BaseSettings):
