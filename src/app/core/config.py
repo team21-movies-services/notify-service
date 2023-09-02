@@ -11,6 +11,22 @@ class ProjectConfig(BaseSettings):
     jwt_secret_key: str = Field(default="secret_key", alias="JWT_SECRET_KEY")
 
 
+# Настройки PostgreSQL
+class PostgresConfig(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix='postgres_')
+    host: str = Field(default='localhost')
+    port: int = Field(default=5432)
+    db: str = Field(default='notify_database')
+    user: str = Field(default='notify')
+    password: str = Field(default='notify')
+    echo_log: bool = Field(default=False)
+
+    @property
+    def database_url(self):
+        return f"postgresql+psycopg://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"
+
+
+# Настройки Celery
 class CeleryConfig(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="CELERY_")
     user: str = Field(default="guest")
@@ -34,6 +50,7 @@ class AdminConfig(BaseSettings):
 
 class Settings(BaseSettings):
     project: ProjectConfig = ProjectConfig()
+    postgres: PostgresConfig = PostgresConfig()
     celery: CeleryConfig = CeleryConfig()
     admin: AdminConfig = AdminConfig()
 

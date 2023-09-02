@@ -13,18 +13,61 @@ services:
     depends_on:
       - notify-service-api
 
+  notify-service-postgres:
+    image: postgres:13
+    container_name: notify-service-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5    
+    networks:
+      - notify-service-network
+    env_file:
+      - ./.env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
   notify-service-api:
     container_name: notify-service-api
     restart: unless-stopped
     build:
       context: .
       dockerfile: infra/backend/Dockerfile
+    depends_on:
+      notify-service-postgres:
+        condition: service_healthy
     networks:
       - notify-service-network
     env_file:
       - ./src/.env
 
+  notify-service-migration:
+    container_name: notify-service-migration
+    build:
+      context: .
+      dockerfile: infra/backend/Dockerfile
+    networks:
+      - notify-service-network
+    depends_on:
+      notify-service-postgres:
+        condition: service_healthy
+    env_file:
+      - ./src/.env
+    command: poetry run alembic upgrade head
+
 networks:
   notify-service-network:
     name: notify-service-network
     external: true
+
+volumes:
+  db_data:
