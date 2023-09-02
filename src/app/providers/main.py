@@ -3,6 +3,7 @@ import logging
 from fastapi import FastAPI
 
 from core.config import Settings
+from providers.admin_provider import AdminProvider
 from providers.celery_provider import CeleryProvider
 from providers.pg_providers import SQLAlchemyProvider
 
@@ -21,3 +22,11 @@ def setup_providers(app: FastAPI, settings: Settings):
     )
     sa_provider.register_events()
     logger.info(f"Setup SQLAlchemy Provider. DSN: {settings.postgres.database_url}")
+
+    admin_provider = AdminProvider(
+        app=app,
+        settings=settings.admin,
+        session_maker=sa_provider.async_session_maker,
+    )
+    admin_provider.register_events()
+    logger.info("Setup Admin Provider.")

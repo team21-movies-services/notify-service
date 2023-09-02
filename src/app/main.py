@@ -3,7 +3,6 @@ from logging import config as logging_config
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
-from api.admin_panel.main import setup_admin_panel
 from api.routers.main import setup_routers
 from core.config import Settings
 from core.logger import LOGGING
@@ -26,7 +25,6 @@ def create_app(settings: Settings):
     )
     setup_providers(app, settings)
     setup_routers(app)
-    setup_admin_panel(app, settings.admin)
     setup_dependencies(app)
     setup_middleware(app)
     return app
