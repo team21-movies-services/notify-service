@@ -21,7 +21,13 @@ class Schedule(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):
     crontab: Mapped[str] = Column(String(127), nullable=True, comment="Шаблон расписания")
     start_time: Mapped[datetime] = Column(TIMESTAMP(timezone=False), nullable=True, comment="Время старта нотификации")
     completed: Mapped[bool] = Column(BOOLEAN, nullable=False, default=False, comment="Флаг завершения расписания")
-    content: Mapped[dict] = Column(JSONB, nullable=False, default='{}', comment="Содержимое нотификации")
+    content: Mapped[dict] = Column(
+        JSONB,
+        nullable=False,
+        default={},
+        server_default='{}',
+        comment="Содержимое нотификации",
+    )
 
     notification_id: Mapped[uuid.UUID] = Column(
         UUID(as_uuid=True),
