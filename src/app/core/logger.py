@@ -1,7 +1,7 @@
 import json
 import logging
 
-from .config import settings
+from app.core.config import settings
 
 LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 LOG_DEFAULT_HANDLERS = ["console"]

@@ -4,10 +4,10 @@ from sqlalchemy import PrimaryKeyConstraint, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, relationship
 
-from models.base import BaseModel, Column, RestrictForeignKey
-from models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
-from models.sender import Sender
-from models.wrapper import Wrapper
+from shared.database.models.base import BaseModel, Column, RestrictForeignKey
+from shared.database.models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
+from shared.database.models.sender import Sender
+from shared.database.models.wrapper import Wrapper
 
 
 class Template(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):

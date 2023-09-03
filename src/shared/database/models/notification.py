@@ -5,9 +5,9 @@ from sqlalchemy import PrimaryKeyConstraint, String
 from sqlalchemy.dialects.postgresql import ENUM, UUID
 from sqlalchemy.orm import Mapped, relationship
 
-from models.base import BaseModel, Column, RestrictForeignKey
-from models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
-from models.template import Template
+from shared.database.models.base import BaseModel, Column, RestrictForeignKey
+from shared.database.models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
+from shared.database.models.template import Template
 
 
 class NotificationType(StrEnum):

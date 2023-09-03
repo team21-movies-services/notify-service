@@ -5,9 +5,9 @@ from sqlalchemy import TIMESTAMP, PrimaryKeyConstraint, String
 from sqlalchemy.dialects.postgresql import BOOLEAN, JSONB, UUID
 from sqlalchemy.orm import Mapped
 
-from models.base import BaseModel, Column, RestrictForeignKey
-from models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
-from models.notification import Notification
+from shared.database.models.base import BaseModel, Column, RestrictForeignKey
+from shared.database.models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
+from shared.database.models.notification import Notification
 
 
 class Schedule(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):

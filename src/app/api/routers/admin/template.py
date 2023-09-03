@@ -2,7 +2,7 @@ from fastapi import Request
 from fastapi.responses import RedirectResponse
 from sqladmin import ModelView, action
 
-from models.template import Template
+from shared.database.models.template import Template
 
 
 class TemplateAdminView(ModelView, model=Template):  # type: ignore

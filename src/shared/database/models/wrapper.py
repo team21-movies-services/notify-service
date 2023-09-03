@@ -1,8 +1,8 @@
 from sqlalchemy import PrimaryKeyConstraint, String, Text
 from sqlalchemy.orm import Mapped
 
-from models.base import BaseModel, Column
-from models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
+from shared.database.models.base import BaseModel, Column
+from shared.database.models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
 
 
 class Wrapper(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):
