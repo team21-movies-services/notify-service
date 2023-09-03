@@ -31,6 +31,10 @@ make build-local
 make up-local
 ```
 
+# Admin panel
+
+go to - http://localhost/admin
+
 # Migration
 
 1) generate

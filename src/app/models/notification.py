@@ -39,3 +39,6 @@ class Notification(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):
     )
 
     template: Mapped[Template] = relationship()
+
+    def __str__(self) -> str:
+        return f"{self.event_name} - {self.notification_type} - {self.id}"
