@@ -1,8 +1,8 @@
 from celery import Celery
 from fastapi import FastAPI
 
-from core.config import Settings
-from providers import BaseProvider
+from app.core.config import Settings
+from app.providers import BaseProvider
 
 
 class CeleryProvider(BaseProvider):

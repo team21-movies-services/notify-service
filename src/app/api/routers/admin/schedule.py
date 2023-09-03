@@ -1,6 +1,5 @@
+from shared.database.models.schedule import Schedule
 from sqladmin import ModelView
-
-from models.schedule import Schedule
 
 
 class ScheduleAdminView(ModelView, model=Schedule):  # type: ignore

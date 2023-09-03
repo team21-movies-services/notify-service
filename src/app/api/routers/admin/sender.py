@@ -1,6 +1,5 @@
+from shared.database.models.sender import Sender
 from sqladmin import ModelView
-
-from models.sender import Sender
 
 
 class SenderAdminView(ModelView, model=Sender):  # type: ignore

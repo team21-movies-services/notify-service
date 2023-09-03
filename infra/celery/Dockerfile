@@ -3,8 +3,8 @@ FROM python:3.11-slim
 # Основной путь приложения
 ENV SRC_DIR=/opt
 
-# Путь до приложения celery
-ENV APP_DIR=$SRC_DIR/app
+ENV WORKER_DIR=$SRC_DIR/celery_worker
+ENV SHARED_DIR=$SRC_DIR/shared
 
 ENV APP_USER=celery-user
 
@@ -28,9 +28,8 @@ RUN pip install --user --upgrade pip && \
 COPY pyproject.toml pyproject.toml
 RUN poetry install --no-root --only main
 
-WORKDIR $APP_DIR
-
 # Копирования кода приложения
-COPY ./src/celery_worker $APP_DIR
+COPY ./src/celery_worker $WORKER_DIR
+COPY ./src/shared $SHARED_DIR
 
 COPY infra/celery/entrypoint.sh /usr/local/bin/entrypoint.sh
