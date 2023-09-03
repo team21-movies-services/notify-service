@@ -18,7 +18,9 @@ services:
       - notify-service-rabbitmq
     networks:
       - notify-service-network
-    command: poetry run celery -A main worker --autoscale 10 --loglevel=info
+    env_file:
+      - ./src/.env
+    command: poetry run celery -A celery_worker.main worker --autoscale 10 --loglevel=info
 
   notify-service-rabbitmq:
     image: rabbitmq:management

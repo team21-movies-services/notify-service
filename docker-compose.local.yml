@@ -10,31 +10,20 @@ services:
       - ./infra/nginx/configs:/etc/nginx/conf.d:rw
 
   notify-service-postgres:
-    image: postgres:13
-    container_name: notify-service-postgres
     ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    env_file:
-      - ./.env
-    volumes:
-      - db_data:/var/lib/postgresql/data
-
+      - ${POSTGRES_PORT:-5432}:5432
 
   notify-service-api:
     ports:
       - ${BACKEND_PORT:-8001}:8001
-    build:
-      context: .
-      dockerfile: infra/backend/Dockerfile
-    depends_on:
-      - notify-service-postgres
     volumes:
       - ./src/app:/opt/app
-    command: poetry run uvicorn main:app --host 0.0.0.0 --port 8001 --reload
+      - ./src/shared:/opt/shared
+    command: poetry run uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
 
-volumes:
-  db_data
+  notify-service-migration:
+    volumes:
+      - ./src/app:/opt/app
+      - ./src/shared:/opt/shared
+      - ./src/migrations:/opt/migrations
+      - ./src/alembic.ini:/opt/alembic.ini
