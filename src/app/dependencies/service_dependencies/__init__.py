@@ -1,2 +1,3 @@
+from .events_service_factory import create_events_service
 from .status_service_factory import create_status_service
 from .templates_service_factory import create_templates_service
