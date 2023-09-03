@@ -36,7 +36,7 @@ jobs:
     - name: "Запуск линтеров: flake mypy"
       run: |
         poetry run flake8 ./src --format=html --htmldir=flake-reports
-        poetry run mypy ./src
+        poetry run mypy ./src --config-file=./mypy.ini
 
     - name: "Запуск линтеров: black, isort"
       run: |
