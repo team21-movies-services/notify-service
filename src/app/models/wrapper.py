@@ -16,3 +16,6 @@ class Wrapper(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):
 
     name: Mapped[str] = Column(String(127), nullable=False, comment="Название враппера")
     body: Mapped[str] = Column(Text, nullable=False, comment="Тело враппера")
+
+    def __str__(self) -> str:
+        return f"{self.name} - {self.id}"

@@ -2,7 +2,7 @@ import uuid
 
 from sqlalchemy import PrimaryKeyConstraint, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
-from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import Mapped, relationship
 
 from models.base import BaseModel, Column, RestrictForeignKey
 from models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
@@ -24,7 +24,7 @@ class Template(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):
 
     subject: Mapped[str] = Column(String(127), nullable=True, comment="Заголовок шаблона")
     body: Mapped[str] = Column(Text, nullable=False, comment="Тело шаблона")
-    json_vars: Mapped[dict] = Column(JSONB, nullable=False, default='{}', comment="Переменные шаблона")
+    json_vars: Mapped[dict] = Column(JSONB, nullable=False, default={}, comment="Переменные шаблона")
 
     wrapper_id: Mapped[uuid.UUID] = Column(
         UUID(as_uuid=True),
@@ -38,3 +38,9 @@ class Template(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):
         nullable=True,
         comment="ID отправителя",
     )
+
+    wrapper: Mapped[Wrapper] = relationship()
+    sender: Mapped[Sender] = relationship()
+
+    def __str__(self) -> str:
+        return f"{self.name} - {self.id}"

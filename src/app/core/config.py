@@ -43,10 +43,16 @@ class CeleryConfig(BaseSettings):
         return f"rpc://{self.user}:{self.password}@{self.host}"
 
 
+class AdminConfig(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="ADMIN_")
+    debug: bool = Field(default=False)
+
+
 class Settings(BaseSettings):
     project: ProjectConfig = ProjectConfig()
     postgres: PostgresConfig = PostgresConfig()
     celery: CeleryConfig = CeleryConfig()
+    admin: AdminConfig = AdminConfig()
 
 
 settings = Settings()

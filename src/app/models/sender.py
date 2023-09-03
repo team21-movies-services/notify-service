@@ -16,3 +16,6 @@ class Sender(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):
 
     name: Mapped[str] = Column(String(127), nullable=False, comment="Имя отправителя")
     description: Mapped[str] = Column(String(255), nullable=False, comment="Описание отправителя")
+
+    def __str__(self) -> str:
+        return f"{self.name} - {self.id}"

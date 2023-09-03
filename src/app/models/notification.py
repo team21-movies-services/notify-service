@@ -3,7 +3,7 @@ from enum import StrEnum, auto
 
 from sqlalchemy import PrimaryKeyConstraint, String
 from sqlalchemy.dialects.postgresql import ENUM, UUID
-from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import Mapped, relationship
 
 from models.base import BaseModel, Column, RestrictForeignKey
 from models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
@@ -37,3 +37,8 @@ class Notification(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):
         nullable=False,
         comment="Типы нотификаций",
     )
+
+    template: Mapped[Template] = relationship()
+
+    def __str__(self) -> str:
+        return f"{self.event_name} - {self.notification_type} - {self.id}"
