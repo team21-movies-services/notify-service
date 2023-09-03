@@ -2,10 +2,10 @@ import logging
 
 from fastapi import FastAPI
 
-from core.config import Settings
-from providers.admin_provider import AdminProvider
-from providers.celery_provider import CeleryProvider
-from providers.pg_providers import SQLAlchemyProvider
+from app.core.config import Settings
+from app.providers.admin_provider import AdminProvider
+from app.providers.celery_provider import CeleryProvider
+from app.providers.pg_providers import SQLAlchemyProvider
 
 logger = logging.getLogger(__name__)
 

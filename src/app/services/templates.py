@@ -3,7 +3,7 @@ from uuid import UUID
 
 from jinja2 import DictLoader, Environment, meta
 
-from repositories.templates import TemplatesRepositoryProtocol
+from app.repositories.templates import TemplatesRepositoryProtocol
 
 
 class TemplatesServiceABC(ABC):

@@ -18,9 +18,12 @@ services:
       - ${BACKEND_PORT:-8001}:8001
     volumes:
       - ./src/app:/opt/app
-    command: poetry run uvicorn main:app --host 0.0.0.0 --port 8001 --reload
+      - ./src/shared:/opt/shared
+    command: poetry run uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
 
   notify-service-migration:
     volumes:
-      - ./src:/opt/app
-    # command: sleep 1
+      - ./src/app:/opt/app
+      - ./src/shared:/opt/shared
+      - ./src/migrations:/opt/migrations
+      - ./src/alembic.ini:/opt/alembic.ini

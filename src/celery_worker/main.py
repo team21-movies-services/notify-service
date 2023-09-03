@@ -1,8 +1,15 @@
+import logging
 import time
+from uuid import UUID
 
 from celery import Celery
+from celery_worker.connectors import SyncPGConnect
+from celery_worker.repositories import TemplatesRepository
 
-time.sleep(15)
+time.sleep(5)
+
+
+logger = logging.getLogger(__name__)
 
 app = Celery(
     "notify",
@@ -10,7 +17,15 @@ app = Celery(
     backend="rpc://guest:guest@notify-service-rabbitmq",
 )
 
+pg_connect = SyncPGConnect()
+
 
 @app.task(name="debug_task")
 def add(x, y):
     return x + y
+
+
+@app.task(name="get_template")
+def get_template(template_id: UUID):
+    repository = TemplatesRepository(session=next(pg_connect.get_db_session()))
+    logger.info(repository.get(template_id))

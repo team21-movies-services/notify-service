@@ -4,7 +4,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import HTMLResponse
 
-from services.templates import TemplatesServiceABC
+from app.services.templates import TemplatesServiceABC
 
 router = APIRouter(prefix="/templates", tags=["Templates"])
 

@@ -2,15 +2,15 @@ from fastapi import FastAPI
 from sqladmin import Admin
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from api.routers.admin import (
+from app.api.routers.admin import (
     NotificationAdminView,
     ScheduleAdminView,
     SenderAdminView,
     TemplateAdminView,
     WrapperAdminView,
 )
-from core.config import AdminConfig
-from providers import BaseProvider
+from app.core.config import AdminConfig
+from app.providers import BaseProvider
 
 
 class AdminProvider(BaseProvider):
