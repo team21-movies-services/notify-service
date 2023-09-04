@@ -50,7 +50,7 @@ class NotifyService:
             logger.info(template)
             logger.info(users)
 
-            # rendered_template = notify_handler.render(content, template, template_wrapper)
+            # rendered_template = notify_handler.render(content, template)
             # notify_handler.send(users, rendered_template)
 
 
