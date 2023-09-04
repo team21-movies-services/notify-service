@@ -1,6 +1,6 @@
 from typing import NoReturn, Protocol
 
-from celery_worker.exceptions.events import HandlerHasntExistedYet
+from celery_worker.exceptions.handlers import HandlerHasntExistedYet
 from shared.enums.notifications import NotificationTypesEnum
 
 

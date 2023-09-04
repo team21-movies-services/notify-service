@@ -1,2 +1,2 @@
-class HandlerHasntExistedYet(Exception):
-    """Handler hasn't existed yet"""
+class EventCouldNotBeHadnled(Exception):
+    """Event could not be handled"""
