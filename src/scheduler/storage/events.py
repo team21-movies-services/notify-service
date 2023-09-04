@@ -6,10 +6,10 @@ import psycopg
 from croniter import croniter
 from psycopg.errors import OperationalError
 from psycopg.rows import class_row
-from utils import gen_backoff
 
 from core.config import Settings
 from schemas import Event
+from utils import gen_backoff
 
 logger = logging.getLogger(__name__)
 RETRY_INTERVAL = 10
