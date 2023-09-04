@@ -1,8 +1,12 @@
+import logging
 from typing import Generator
 
-from celery_worker.config import PostgresConfig
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
+
+from celery_worker.config import PostgresConfig
+
+logger = logging.getLogger(__name__)
 
 
 class SyncPGConnect:
@@ -27,3 +31,7 @@ class SyncPGConnect:
     def get_db_session(self) -> Generator[Session, None, None]:
         with self._Session() as session:
             yield session
+
+    def close(self) -> None:
+        self._engine.dispose()
+        logger.info("DB connection has closed")

@@ -11,6 +11,9 @@ services:
       - notify-service-network
     env_file:
       - ./src/.env
+    volumes:
+      - ./src/celery_worker:/opt/celery_worker
+      - ./src/shared:/opt/shared
     command: poetry run celery -A celery_worker.main worker --autoscale 10 --loglevel=info
 
   notify-service-rabbitmq:
