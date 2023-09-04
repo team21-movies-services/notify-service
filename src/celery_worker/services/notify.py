@@ -40,7 +40,8 @@ class NotifyService:
             try:
                 handler = self._handlers_factory.get(notification_type)
                 template = self._template_repository.get_by_event_and_notify(event.event_name, notification_type)
-            except (HandlerHasntExistedYet, ObjectDoesNotExist):
+            except (HandlerHasntExistedYet, ObjectDoesNotExist) as err:
+                logger.exception("Something went wrong", exc_info=err)
                 continue
 
             users = list(filter(lambda user: notification_type in user.notifications, users_list))
@@ -49,7 +50,7 @@ class NotifyService:
             logger.info(template)
             logger.info(users)
 
-            # rendered_template = notify_handler.render(content, template)
+            # rendered_template = notify_handler.render(content, template, template_wrapper)
             # notify_handler.send(users, rendered_template)
 
 

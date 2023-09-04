@@ -6,6 +6,7 @@ from requests import ConnectionError
 
 from celery_worker.config import NotificationsConfig
 from celery_worker.connectors import SyncPGConnect
+from celery_worker.exceptions.base import BaseCeleryException
 from celery_worker.main import app
 from celery_worker.repositories import TemplatesRepository
 from celery_worker.services import NotifyService
@@ -31,10 +32,8 @@ def send_notification(event: EventDict):
         service.process_event(EventSchema.model_validate(event))
     except ValidationError as err:
         logger.exception("Event validation error", exc_info=err)
-    except ConnectionError as err:
+    except (ConnectionError, BaseCeleryException) as err:
         logger.exception("get error", exc_info=err)
         # TODO: Вернуть event в очередь при возникновении ошибки
     finally:
         pg_connect.close()
-
-    # TODO: сохранение эвента об отправке уведомления в event-service
