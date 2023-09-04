@@ -30,15 +30,18 @@ class NotifyBackend:
         self._send_notifications(event, users, content)
 
     def _send_notifications(self, event: EventSchema, users: UserInfoList, content: ContentListSchema) -> None:
-        for notification_type in NotificationTypesEnum:
+        for notify_type in NotificationTypesEnum:
             try:
-                handler = self._handlers_factory.get(notification_type)
-                template = self._template_repository.get_by_event_and_notify(event.event_name, notification_type)
-            except (HandlerHasntExistedYet, ObjectDoesNotExist) as err:
-                logger.exception("Something went wrong", exc_info=err)
+                handler = self._handlers_factory.get(notify_type)
+                template = self._template_repository.get_by_event_and_notify(event.event_name, notify_type)
+            except HandlerHasntExistedYet:
+                logger.info("{} handler coming soon".format(notify_type.capitalize()))
+                continue
+            except ObjectDoesNotExist as err:
+                logger.exception("Template for {} - {} hasn't found.".format(event.event_name, notify_type), err)
                 continue
 
-            filtered_users = list(filter(lambda user: notification_type in user.notifications, users))
+            filtered_users = list(filter(lambda user: notify_type in user.notifications, users))
 
             logger.info(handler)
             logger.info(template.name)
