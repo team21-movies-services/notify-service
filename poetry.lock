@@ -1911,6 +1911,17 @@ files = [
 ]
 
 [[package]]
+name = "types-croniter"
+version = "1.4.0.1"
+description = "Typing stubs for croniter"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-croniter-1.4.0.1.tar.gz", hash = "sha256:5821688c93b874500b6863b8a164a8dbc49efdced985d00cbdddc029b81067b8"},
+    {file = "types_croniter-1.4.0.1-py3-none-any.whl", hash = "sha256:b8996c11d5e942be59d669388e2515e50ca4935b61e4337bac9e81bfdde9cf72"},
+]
+
+[[package]]
 name = "types-pyopenssl"
 version = "23.2.0.2"
 description = "Typing stubs for pyOpenSSL"
@@ -2042,4 +2053,4 @@ email = ["email-validator"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10 || ^3.11"
-content-hash = "c5c16a88272b6755d58bc5967eb1a15f56f2a2646c2d28f6a23d8ca26f09dba8"
+content-hash = "8b49dcd31d012126cf34c7bf7045bde0e866bd4f993717676416fc51accf5a21"
