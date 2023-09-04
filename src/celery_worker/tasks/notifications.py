@@ -5,7 +5,7 @@ from pydantic_core import ValidationError
 from requests import ConnectionError
 
 from celery_worker.backend import NotifyBackend
-from celery_worker.config import NotificationsConfig
+from celery_worker.config import APIsConfig
 from celery_worker.connectors import SyncPGConnect
 from celery_worker.exceptions.base import BaseCeleryException
 from celery_worker.main import app
@@ -25,7 +25,7 @@ def send_notification(event: EventDict):
     template_repository = TemplatesRepository(session=next(pg_connect.get_db_session()))
     handler_factory = HandlersFactory()
     request_session = requests.Session()
-    config = NotificationsConfig()
+    config = APIsConfig()
 
     try:
         service = NotifyBackend(template_repository, handler_factory, request_session, config)

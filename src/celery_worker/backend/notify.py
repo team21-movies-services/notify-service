@@ -4,7 +4,7 @@ from typing import NoReturn
 
 from requests import Session as RequestSession
 
-from celery_worker.config import NotificationsConfig
+from celery_worker.config import APIsConfig
 from celery_worker.exceptions.events import EventCouldNotBeHadnled
 from celery_worker.exceptions.handlers import HandlerHasntExistedYet
 from celery_worker.repositories import TemplatesRepository
@@ -22,14 +22,14 @@ class NotifyBackend:
     _template_repository: TemplatesRepository
     _handlers_factory: HandlerFactoryProtocol
     _client: RequestSession
-    _config: NotificationsConfig
+    _api: APIsConfig
 
     def process_event(self, event: EventSchema) -> None:
         match event.event_data:
             case EventUsersNewSchema():  # type: ignore[misc]
-                response = self._client.get(self._config.user_info_url.format(user_id=event.event_data.user_id))
+                response = self._client.get(self._api.users.info_uri.format(user_id=event.event_data.user_id))
             case EventFilmsNewSchema():  # type: ignore[misc]
-                response = self._client.get(self._config.users_list_url.format(event_name=event.event_name))
+                response = self._client.get(self._api.users.list_uri.format(event_name=event.event_name))
             case _ as unreachable:
                 _asset_never(unreachable)
 
