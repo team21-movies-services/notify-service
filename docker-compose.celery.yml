@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: infra/scheduler/Dockerfile
     env_file:
-      - src/scheduler/.env
+      - src/.env
     networks:
       - notify-service-network
     depends_on:
