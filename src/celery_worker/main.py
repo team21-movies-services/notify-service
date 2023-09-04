@@ -17,7 +17,6 @@ app = Celery(
     backend="rpc://guest:guest@notify-service-rabbitmq",
     include=[
         "celery_worker.tasks.notifications",
-        "celery_worker.tasks.templates",
     ],
 )
 
