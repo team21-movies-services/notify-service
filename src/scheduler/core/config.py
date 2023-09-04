@@ -40,6 +40,7 @@ class CeleryConfig(BaseSettings):
 
 
 class ProjectConfig(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="SCHEDULER")
     log_level: str = Field(default="INFO")
     check_interval: int = Field(default=60)
 
