@@ -1,6 +1,17 @@
 version: "3.8"
 
 services:
+  notify-service-scheduler:
+    build:
+      context: .
+      dockerfile: infra/scheduler/Dockerfile
+    env_file:
+      - src/.env
+    networks:
+      - notify-service-network
+    depends_on:
+      - notify-service-postgres
+      - notify-service-rabbitmq
   notify-service-worker:
     build:
       context: .
@@ -11,6 +22,9 @@ services:
       - notify-service-network
     env_file:
       - ./src/.env
+    volumes:
+      - ./src/celery_worker:/opt/celery_worker
+      - ./src/shared:/opt/shared
     command: poetry run celery -A celery_worker.main worker --autoscale 10 --loglevel=info
 
   notify-service-rabbitmq:
@@ -23,7 +37,7 @@ services:
   notify-service-flower:
     image: mher/flower:0.9.7
     environment:
-      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq
+      - CELERY_BROKER_URL=amqp://guest:guest@notify-service-rabbitmq
       - FLOWER_PORT=8888
     ports:
       - 8888:8888

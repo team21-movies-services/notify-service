@@ -15,14 +15,17 @@ app = Celery(
     "notify",
     broker="pyamqp://guest:guest@notify-service-rabbitmq",
     backend="rpc://guest:guest@notify-service-rabbitmq",
+    include=[
+        "celery_worker.tasks.notifications",
+    ],
 )
 
 pg_connect = SyncPGConnect()
 
 
 @app.task(name="debug_task")
-def add(x, y):
-    return x + y
+def add(x):
+    return x
 
 
 @app.task(name="get_template")

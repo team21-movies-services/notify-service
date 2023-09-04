@@ -1,0 +1,4 @@
+psycopg[binary]
+pydantic_settings
+celery
+croniter
