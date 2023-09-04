@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 class Event(BaseModel):
     id: UUID
-    crontab: str
+    crontab: str | None
     start_time: datetime
     completed: bool
     content: dict
