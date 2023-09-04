@@ -6,6 +6,7 @@ from celery_worker.connectors import SyncPGConnect
 from celery_worker.main import app
 from celery_worker.repositories import TemplatesRepository
 from celery_worker.services import NotifyService
+from celery_worker.utils.handlers_factory import HandlersFactory
 from shared.schemas.events import EventSchema
 from shared.types.events import EventDict
 
@@ -17,10 +18,11 @@ def send_notification(event: EventDict):
     logger.info("Get event: {event}".format(event=event))
 
     pg_connect = SyncPGConnect()
-    repository = TemplatesRepository(session=next(pg_connect.get_db_session()))
+    template_repository = TemplatesRepository(session=next(pg_connect.get_db_session()))
+    handler_factory = HandlersFactory()
 
     try:
-        service = NotifyService(repository)
+        service = NotifyService(template_repository, handler_factory)
         service.process_event(EventSchema.model_validate(event))
     except ValidationError as err:
         logger.exception("Event validation error", exc_info=err)
