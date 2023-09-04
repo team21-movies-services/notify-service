@@ -2,12 +2,10 @@ import logging
 
 from celery import Celery
 
-from schemas import Event
-
 logger = logging.getLogger(__name__)
 
 
-def send_event(app: Celery, event: Event):
+def send_event(app: Celery, event: dict):
     """
     Функция для отправки события.
     """

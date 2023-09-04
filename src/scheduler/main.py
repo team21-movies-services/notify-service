@@ -26,6 +26,7 @@ def main():
             events = pg_storage.check_events()
             for event in events:
                 send_event(app, event.model_dump())
+                pg_storage.mark_event_as_completed(event)
             sleep(CHECK_INTERVAL)
     finally:
         pg_storage.close_connection()
