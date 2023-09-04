@@ -1,11 +1,10 @@
 from abc import ABC, abstractmethod
 
 from celery_worker.main import add
-from shared.database.models.notification import NotificationType
-
 from core.exceptions.events import NotificationException
 from repositories.events import EventsRepository
 from schemas.request.events import IncomingEvent
+from shared.database.models.notification import NotificationType
 
 
 class EventsServiceABC(ABC):
