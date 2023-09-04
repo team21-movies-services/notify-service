@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 import psycopg
 from psycopg.errors import OperationalError
@@ -29,10 +30,11 @@ class PostgresEventStorage:
 
     @gen_backoff(BACKOFF_EXCEPTIONS)
     def check_events(self):
-        query = "SELECT * FROM events"
+        current_time = datetime.utcnow()
+        query = "SELECT * FROM schedule WHERE completed = %s and start_time < %s"
         self._ensure_connection()
         with self.connection.cursor(row_factory=class_row(Event)) as curr:  # type: ignore
-            result = curr.execute(query)
+            result = curr.execute(query, (False, current_time))
             while True:
                 event = result.fetchone()
                 if not event:
