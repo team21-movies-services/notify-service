@@ -4,12 +4,12 @@ import requests
 from pydantic_core import ValidationError
 from requests import ConnectionError
 
+from celery_worker.backend import NotifyBackend
 from celery_worker.config import NotificationsConfig
 from celery_worker.connectors import SyncPGConnect
 from celery_worker.exceptions.base import BaseCeleryException
 from celery_worker.main import app
 from celery_worker.repositories import TemplatesRepository
-from celery_worker.services import NotifyService
 from celery_worker.utils.handlers_factory import HandlersFactory
 from shared.schemas.events import EventSchema
 from shared.types.events import EventDict
@@ -28,7 +28,7 @@ def send_notification(event: EventDict):
     config = NotificationsConfig()
 
     try:
-        service = NotifyService(template_repository, handler_factory, request_session, config)
+        service = NotifyBackend(template_repository, handler_factory, request_session, config)
         service.process_event(EventSchema.model_validate(event))
     except ValidationError as err:
         logger.exception("Event validation error", exc_info=err)

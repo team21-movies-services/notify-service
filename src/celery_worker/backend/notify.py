@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class NotifyService:
+class NotifyBackend:
     _template_repository: TemplatesRepository
     _handlers_factory: HandlerFactoryProtocol
     _client: RequestSession
