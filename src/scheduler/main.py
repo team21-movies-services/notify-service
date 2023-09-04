@@ -13,9 +13,9 @@ logger = logging.getLogger(__name__)
 CHECK_INTERVAL = settings.project.check_interval
 
 app = Celery(
-    "notify",
-    broker="pyamqp://guest:guest@notify-service-rabbitmq",
-    backend="rpc://guest:guest@notify-service-rabbitmq",
+    settings.celery.app_name,
+    broker=settings.celery.broker,
+    backend=settings.celery.backend,
 )
 
 

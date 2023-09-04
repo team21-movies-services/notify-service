@@ -51,10 +51,9 @@ class PostgresEventStorage:
         else:
             query, params = self._set_delayed_as_completed(event)
         with self.connection.cursor(row_factory=class_row(Event)) as curr:  # type: ignore
-            result = curr.execute(query, params)
-            result.close()
+            curr.execute(query, params)
+            self.connection.commit()  # type: ignore
             curr.close()
-        return None
 
     def _update_scheduled(self, event: Event):
         current_time = datetime.utcnow()
@@ -65,7 +64,7 @@ class PostgresEventStorage:
 
     def _set_delayed_as_completed(self, event: Event):
         current_time = datetime.utcnow()
-        query = "UPDATE schedule SET completed=%s where id=%s"
+        query = "UPDATE schedule SET completed=%s, updated_at=%s where id=%s"
         return query, (True, current_time, event.id)
 
     def close_connection(self):
