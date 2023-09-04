@@ -1,5 +1,6 @@
-from shared.database.models.notification import Notification
 from sqladmin import ModelView
+
+from shared.database.models.notification import Notification
 
 
 class NotificationAdminView(ModelView, model=Notification):  # type: ignore

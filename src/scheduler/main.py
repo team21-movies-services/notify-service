@@ -2,11 +2,11 @@ import logging.config
 from time import sleep
 
 from celery import Celery
-from event_sender import send_notification
-from storage.events import PostgresEventStorage
 
 from core.config import settings
 from core.logger import LOGGING
+from event_sender import send_notification
+from storage.events import PostgresEventStorage
 
 logging.config.dictConfig(LOGGING)
 logger = logging.getLogger(__name__)

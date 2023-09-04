@@ -3,6 +3,7 @@ import time
 from uuid import UUID
 
 from celery import Celery
+
 from celery_worker.connectors import SyncPGConnect
 from celery_worker.repositories import TemplatesRepository
 
@@ -20,8 +21,6 @@ app = Celery(
     ],
 )
 
-pg_connect = SyncPGConnect()
-
 
 @app.task(name="debug_task")
 def add(x):
@@ -30,5 +29,7 @@ def add(x):
 
 @app.task(name="get_template")
 def get_template(template_id: UUID):
+    pg_connect = SyncPGConnect()
     repository = TemplatesRepository(session=next(pg_connect.get_db_session()))
     logger.info(repository.get(template_id))
+    pg_connect.close()

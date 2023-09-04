@@ -1,12 +1,13 @@
 import uuid
 from datetime import datetime
 
-from shared.database.models.base import BaseModel, Column, RestrictForeignKey
-from shared.database.models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
-from shared.database.models.notification import Notification
 from sqlalchemy import TIMESTAMP, PrimaryKeyConstraint, String
 from sqlalchemy.dialects.postgresql import BOOLEAN, JSONB, UUID
 from sqlalchemy.orm import Mapped, relationship
+
+from shared.database.models.base import BaseModel, Column, RestrictForeignKey
+from shared.database.models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
+from shared.database.models.notification import Notification
 
 
 class Schedule(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):
