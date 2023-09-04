@@ -2,8 +2,9 @@ import logging
 import uuid
 
 from sqlalchemy.orm import Session, contains_eager
-from sqlalchemy.sql import select
+from sqlalchemy.sql import and_, select
 
+from shared.database.models.notification import Notification
 from shared.database.models.template import Template
 from shared.exceptions.base import ObjectDoesNotExist
 from shared.schemas.template import TemplateSchema
@@ -21,6 +22,21 @@ class TemplatesRepository:
             .where(Template.id == template_id)
             .join(Template.wrapper)
             .join(Template.sender)
+            .options(contains_eager(Template.wrapper), contains_eager(Template.sender))
+        )
+        result = self._session.execute(query)
+        db_obj = result.scalars().first()
+        if not db_obj:
+            raise ObjectDoesNotExist
+        return TemplateSchema.model_validate(db_obj)
+
+    def get_by_event_and_notify(self, event_name: str, template_type: str) -> TemplateSchema:
+        query = (
+            select(Template)
+            .where(Template.template_type == template_type)
+            .join(Template.wrapper)
+            .join(Template.sender)
+            .join(Notification, and_(Notification.template_id == Template.id, Notification.event_name == event_name))
             .options(contains_eager(Template.wrapper), contains_eager(Template.sender))
         )
         result = self._session.execute(query)

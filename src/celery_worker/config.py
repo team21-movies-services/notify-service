@@ -15,3 +15,15 @@ class PostgresConfig(BaseSettings):
     @property
     def database_url(self):
         return f"postgresql+psycopg://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"
+
+
+class NotificationsConfig(BaseSettings):
+    user_api: str = Field(default="https://d90746a7-1563-46ce-9a3d-8d173a6f8bda.mock.pstmn.io")
+
+    @property
+    def users_list_url(self) -> str:
+        return self.user_api + "/api/v1/notifications/users/?event_name={event_name}"
+
+    @property
+    def user_info_url(self) -> str:
+        return self.user_api + "/api/v1/notifications/users/?user_id={user_id}"
