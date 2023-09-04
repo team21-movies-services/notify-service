@@ -2,9 +2,11 @@ version: "3.8"
 
 services:
   notify-service-scheduler:
-    build: scheduler/.
+    build:
+      context: .
+      dockerfile: infra/scheduler/Dockerfile
     env_file:
-      - scheduler/.env
+      - src/scheduler/.env
     networks:
       - notify-service-network
     depends_on:

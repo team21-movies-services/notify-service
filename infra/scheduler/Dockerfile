@@ -4,11 +4,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 WORKDIR opt/app
-COPY requirements.txt .
+COPY src/scheduler/requirements.txt .
 
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
-COPY . .
+COPY src/scheduler .
 
 ENTRYPOINT ["python", "main.py"]

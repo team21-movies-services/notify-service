@@ -23,8 +23,8 @@ def main():
     pg_storage = PostgresEventStorage(settings)
     try:
         while True:
-            events_gen = pg_storage.check_events()
-            for event in events_gen:
+            events = pg_storage.check_events()
+            for event in events:
                 send_event(app, event.model_dump())
             sleep(CHECK_INTERVAL)
     finally:

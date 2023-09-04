@@ -1,14 +1,16 @@
 import logging
-from time import sleep
 
 import psycopg
+from psycopg.errors import OperationalError
 from psycopg.rows import class_row
+from utils import gen_backoff
 
 from core.config import Settings
 from schemas import Event
 
 logger = logging.getLogger(__name__)
 RETRY_INTERVAL = 10
+BACKOFF_EXCEPTIONS = (OperationalError,)
 
 
 class PostgresEventStorage:
@@ -25,23 +27,18 @@ class PostgresEventStorage:
             logger.info("Подключение(повторное) к базе данных...")
             self.connection = self._connect()
 
+    @gen_backoff(BACKOFF_EXCEPTIONS)
     def check_events(self):
         query = "SELECT * FROM events"
-        try:
-            self._ensure_connection()
-            with self.connection.cursor(row_factory=class_row(Event)) as curr:  # type: ignore
-                result = curr.execute(query)
-                while True:
-                    event = result.fetchone()
-                    if not event:
-                        logger.info("Подходящих событий нет, след проверка через {}c.".format(self.check_interval))
-                        break
-                    yield event
-        except psycopg.OperationalError as e:
-            logger.error("Ошибка подключения к бд: {}".format(e))
-            sleep(RETRY_INTERVAL)
-        finally:
-            curr.close()
+        self._ensure_connection()
+        with self.connection.cursor(row_factory=class_row(Event)) as curr:  # type: ignore
+            result = curr.execute(query)
+            while True:
+                event = result.fetchone()
+                if not event:
+                    logger.info("Подходящих событий нет, след проверка через {}c.".format(self.check_interval))
+                    break
+                yield event
 
     def close_connection(self):
         if self.connection and not self.connection.closed:
