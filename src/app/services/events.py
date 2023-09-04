@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
 
 from celery_worker.main import add
+from shared.database.models.notification import NotificationType
 
+from core.exceptions.events import NotificationException
 from repositories.events import EventsRepository
 from schemas.request.events import IncomingEvent
 
@@ -22,17 +24,17 @@ class EventsService(EventsServiceABC):
         if not notification:
             return None
 
-        if notification.notification_type == 'scheduled':
+        if notification.notification_type == NotificationType.scheduled:
             schedule_event = await self._event_repository.create_schedule_event(
                 event_data=event_data,
                 notification_id=notification.id,
             )
-            schedule_event_data = {'schedule_event_id': schedule_event}
+            schedule_event_data = {'notification_type': NotificationType.scheduled, 'schedule_event_id': schedule_event}
             return schedule_event_data
 
-        elif notification.notification_type == 'instant':
+        elif notification.notification_type == NotificationType.instant:
             # TODO Разобраться, как правильно отправить event в селери и поменять return
             await add()
-            return {"status": "task added"}
+            return {'notification_type': NotificationType.instant, 'task_status': 'task added'}
 
-        return {"status": "Что-то произошло"}
+        raise NotificationException
