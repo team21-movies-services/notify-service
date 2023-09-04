@@ -1,7 +1,8 @@
-from shared.database.models.base import BaseModel, Column
-from shared.database.models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
 from sqlalchemy import PrimaryKeyConstraint, String
 from sqlalchemy.orm import Mapped
+
+from shared.database.models.base import BaseModel, Column
+from shared.database.models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
 
 
 class Sender(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):

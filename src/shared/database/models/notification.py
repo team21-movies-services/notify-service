@@ -1,12 +1,13 @@
 import uuid
 from enum import StrEnum, auto
 
-from shared.database.models.base import BaseModel, Column, RestrictForeignKey
-from shared.database.models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
-from shared.database.models.template import Template
 from sqlalchemy import PrimaryKeyConstraint, String
 from sqlalchemy.dialects.postgresql import ENUM, UUID
 from sqlalchemy.orm import Mapped, relationship
+
+from shared.database.models.base import BaseModel, Column, RestrictForeignKey
+from shared.database.models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
+from shared.database.models.template import Template
 
 
 class NotificationType(StrEnum):

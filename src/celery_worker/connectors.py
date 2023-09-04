@@ -1,8 +1,9 @@
 from typing import Generator
 
-from celery_worker.config import PostgresConfig
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
+
+from celery_worker.config import PostgresConfig
 
 
 class SyncPGConnect:

@@ -4,7 +4,8 @@ skip-string-normalization = true
 
 [tool.isort]
 profile = "black"
-src_paths = ["src/app", "performance_tests/"]
+src_paths = ["src/app", "src/celery_worker", "src/scheduler", "src/shared"]
+skip = ["src/migrations"]
 
 [tool.poetry]
 name = "notify-service"

@@ -1,10 +1,11 @@
 import logging
 import uuid
 
-from shared.database.models.template import Template
-from shared.exceptions.base import ObjectDoesNotExist
 from sqlalchemy.orm import Session, contains_eager
 from sqlalchemy.sql import select
+
+from shared.database.models.template import Template
+from shared.exceptions.base import ObjectDoesNotExist
 
 logger = logging.getLogger(__name__)
 

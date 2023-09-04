@@ -3,6 +3,7 @@ import time
 from uuid import UUID
 
 from celery import Celery
+
 from celery_worker.connectors import SyncPGConnect
 from celery_worker.repositories import TemplatesRepository
 

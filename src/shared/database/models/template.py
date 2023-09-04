@@ -1,12 +1,13 @@
 import uuid
 
+from sqlalchemy import PrimaryKeyConstraint, String, Text
+from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.orm import Mapped, relationship
+
 from shared.database.models.base import BaseModel, Column, RestrictForeignKey
 from shared.database.models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
 from shared.database.models.sender import Sender
 from shared.database.models.wrapper import Wrapper
-from sqlalchemy import PrimaryKeyConstraint, String, Text
-from sqlalchemy.dialects.postgresql import JSONB, UUID
-from sqlalchemy.orm import Mapped, relationship
 
 
 class Template(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):
