@@ -5,9 +5,9 @@ from celery import Celery
 logger = logging.getLogger(__name__)
 
 
-def send_event(app: Celery, event: dict):
+def send_notification(app: Celery, notification_content: dict):
     """
-    Функция для отправки события.
+    Функция для отправки уведомления.
     """
-    logger.info(f"Событие {event} отправлено")
-    app.send_task('debug_task', (event,))
+    logger.info(f"Событие {notification_content} отправлено")
+    app.send_task('send_notification', (notification_content,))

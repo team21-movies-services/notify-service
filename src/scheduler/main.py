@@ -2,7 +2,7 @@ import logging.config
 from time import sleep
 
 from celery import Celery
-from event_sender import send_event
+from event_sender import send_notification
 from storage.events import PostgresEventStorage
 
 from core.config import settings
@@ -25,7 +25,7 @@ def main():
         while True:
             events = pg_storage.check_events()
             for event in events:
-                send_event(app, event.model_dump())
+                send_notification(app, event.content)
                 pg_storage.mark_event_as_completed(event)
             sleep(CHECK_INTERVAL)
     finally:
