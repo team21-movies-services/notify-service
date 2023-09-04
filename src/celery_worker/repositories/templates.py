@@ -4,6 +4,7 @@ import uuid
 from sqlalchemy.orm import Session, contains_eager
 from sqlalchemy.sql import and_, select
 
+from celery_worker.connectors import SyncPGConnect
 from shared.database.models.notification import Notification
 from shared.database.models.template import Template
 from shared.exceptions.base import ObjectDoesNotExist
@@ -44,3 +45,7 @@ class TemplatesRepository:
         if not db_obj:
             raise ObjectDoesNotExist
         return TemplateSchema.model_validate(db_obj)
+
+
+def get_templates_repository(pg_connect: SyncPGConnect) -> TemplatesRepository:
+    return TemplatesRepository(session=next(pg_connect.get_db_session()))

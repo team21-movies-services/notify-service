@@ -1,18 +1,18 @@
 import logging
 from dataclasses import dataclass
-from typing import NoReturn
 
-from requests import Session as RequestSession
-
-from celery_worker.config import APIsConfig
-from celery_worker.exceptions.events import EventCouldNotBeHadnled
 from celery_worker.exceptions.handlers import HandlerHasntExistedYet
 from celery_worker.repositories import TemplatesRepository
-from celery_worker.schemas.users import UserInfoSchema
-from celery_worker.utils.handlers_factory import HandlerFactoryProtocol
+from celery_worker.schemas.content import ContentListSchema
+from celery_worker.schemas.users import UserInfoList
+from celery_worker.utils import (
+    ContentServiceProtocol,
+    HandlerFactoryProtocol,
+    UserServiceProtocol,
+)
 from shared.enums.notifications import NotificationTypesEnum
 from shared.exceptions.base import ObjectDoesNotExist
-from shared.schemas.events import EventFilmsNewSchema, EventSchema, EventUsersNewSchema
+from shared.schemas.events import EventSchema
 
 logger = logging.getLogger(__name__)
 
@@ -21,21 +21,15 @@ logger = logging.getLogger(__name__)
 class NotifyBackend:
     _template_repository: TemplatesRepository
     _handlers_factory: HandlerFactoryProtocol
-    _client: RequestSession
-    _api: APIsConfig
+    _user_service: UserServiceProtocol
+    _content_service: ContentServiceProtocol
 
     def process_event(self, event: EventSchema) -> None:
-        match event.event_data:
-            case EventUsersNewSchema():  # type: ignore[misc]
-                response = self._client.get(self._api.users.info_uri.format(user_id=event.event_data.user_id))
-            case EventFilmsNewSchema():  # type: ignore[misc]
-                response = self._client.get(self._api.users.list_uri.format(event_name=event.event_name))
-            case _ as unreachable:
-                _asset_never(unreachable)
+        users = self._user_service.get_users(event)
+        content = self._content_service.get_content(event)
+        self._send_notifications(event, users, content)
 
-        users_list = [UserInfoSchema(**user) for user in response.json()]
-        # TODO: получение контента
-
+    def _send_notifications(self, event: EventSchema, users: UserInfoList, content: ContentListSchema) -> None:
         for notification_type in NotificationTypesEnum:
             try:
                 handler = self._handlers_factory.get(notification_type)
@@ -44,15 +38,12 @@ class NotifyBackend:
                 logger.exception("Something went wrong", exc_info=err)
                 continue
 
-            users = list(filter(lambda user: notification_type in user.notifications, users_list))
+            filtered_users = list(filter(lambda user: notification_type in user.notifications, users))
 
             logger.info(handler)
-            logger.info(template)
-            logger.info(users)
+            logger.info(template.name)
+            logger.info(filtered_users)
+            logger.info(content)
 
             # rendered_template = notify_handler.render(content, template)
-            # notify_handler.send(users, rendered_template)
-
-
-def _asset_never(event_name: str) -> NoReturn:
-    raise EventCouldNotBeHadnled(event_name)
+            # notify_handler.send(filtered_users, rendered_template)

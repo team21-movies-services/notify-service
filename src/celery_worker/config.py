@@ -29,6 +29,15 @@ class UsersApiConfig(BaseSettings):
         return self.host + "/api/v1/notifications/users/?user_id={user_id}"
 
 
+class FilmsApiConfig(BaseSettings):
+    host: str = Field(default="https://d90746a7-1563-46ce-9a3d-8d173a6f8bda.mock.pstmn.io")
+
+    @property
+    def new_uri(self) -> str:
+        return self.host + "/api/v1/films/new?from_date={from_date}"
+
+
 # Настройки внешних API
 class APIsConfig(BaseSettings):
-    users = UsersApiConfig()
+    users: UsersApiConfig = UsersApiConfig()
+    films: FilmsApiConfig = FilmsApiConfig()

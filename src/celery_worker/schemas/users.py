@@ -9,3 +9,6 @@ class UserInfoSchema(BaseModel):
     first_name: str
     last_name: str
     notifications: list[NotificationTypesEnum]
+
+
+UserInfoList = list[UserInfoSchema]

@@ -1,16 +1,15 @@
 import logging
 
-import requests
 from pydantic_core import ValidationError
 from requests import ConnectionError
+from sqlalchemy.exc import OperationalError
 
 from celery_worker.backend import NotifyBackend
-from celery_worker.config import APIsConfig
 from celery_worker.connectors import SyncPGConnect
 from celery_worker.exceptions.base import BaseCeleryException
 from celery_worker.main import app
-from celery_worker.repositories import TemplatesRepository
-from celery_worker.utils.handlers_factory import HandlersFactory
+from celery_worker.repositories import get_templates_repository
+from celery_worker.utils import HandlersFactory, get_content_service, get_user_service
 from shared.schemas.events import EventSchema
 from shared.types.events import EventDict
 
@@ -21,19 +20,25 @@ logger = logging.getLogger(__name__)
 def send_notification(event: EventDict):
     logger.info("Get event: {event}".format(event=event))
 
-    pg_connect = SyncPGConnect()
-    template_repository = TemplatesRepository(session=next(pg_connect.get_db_session()))
-    handler_factory = HandlersFactory()
-    request_session = requests.Session()
-    config = APIsConfig()
-
     try:
-        service = NotifyBackend(template_repository, handler_factory, request_session, config)
-        service.process_event(EventSchema.model_validate(event))
+        event_model = EventSchema.model_validate(event)
     except ValidationError as err:
         logger.exception("Event validation error", exc_info=err)
-    except (ConnectionError, BaseCeleryException) as err:
-        logger.exception("get error", exc_info=err)
+        # TODO: Вернуть event в очередь при возникновении ошибки
+        return
+
+    pg_connect = SyncPGConnect()
+
+    try:
+        handler_factory = HandlersFactory()
+        user_service = get_user_service(event_model)
+        template_repository = get_templates_repository(pg_connect)
+        content_service = get_content_service(event_model)
+
+        service = NotifyBackend(template_repository, handler_factory, user_service, content_service)
+        service.process_event(event_model)
+    except (ConnectionError, BaseCeleryException, OperationalError) as err:
+        logger.exception("Getting some error.", exc_info=err)
         # TODO: Вернуть event в очередь при возникновении ошибки
     finally:
         pg_connect.close()
