@@ -4,7 +4,6 @@ from celery import Celery
 
 from core.exceptions.events import NotificationException
 from repositories.events import EventsRepository
-from scheduler.event_sender import send_notification
 from schemas.request.events import IncomingEvent
 from shared.database.models.notification import NotificationType
 
@@ -35,7 +34,7 @@ class EventsService(EventsServiceABC):
             return schedule_event_data
 
         elif notification.notification_type == NotificationType.instant:
-            await send_notification(app=self._celery_app, notification_content=event_data.model_dump())
+            self._celery_app.send_task('send_notification', (event_data.model_dump(),))
             return {'notification_type': NotificationType.instant, 'event_status': 'event has sent'}
 
         raise NotificationException
