@@ -38,7 +38,7 @@ class NotifyBackend:
                 logger.info("{} handler coming soon".format(notify_type.capitalize()))
                 continue
             except ObjectDoesNotExist as err:
-                logger.exception("Template for {} - {} hasn't found.".format(event.event_name, notify_type), err)
+                logger.exception("Template for {} {} hasn't found.".format(event.event_name, notify_type), exc_info=err)
                 continue
 
             filtered_users = list(filter(lambda user: notify_type in user.notifications, users))
