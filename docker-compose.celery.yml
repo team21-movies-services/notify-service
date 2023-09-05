@@ -12,6 +12,23 @@ services:
     depends_on:
       - notify-service-postgres
       - notify-service-rabbitmq
+    volumes:
+      - ./src/shared:/opt/app/shared
+  notify-service-instant-worker:
+    build:
+      context: .
+      dockerfile: infra/celery/Dockerfile
+    depends_on:
+      - notify-service-rabbitmq
+    networks:
+      - notify-service-network
+    env_file:
+      - ./src/.env
+    volumes:
+      - ./src/celery_worker:/opt/celery_worker
+      - ./src/shared:/opt/shared
+    command: poetry run celery -A celery_worker.main worker --loglevel=info -Q instant -c 2
+
   notify-service-worker:
     build:
       context: .
@@ -25,7 +42,7 @@ services:
     volumes:
       - ./src/celery_worker:/opt/celery_worker
       - ./src/shared:/opt/shared
-    command: poetry run celery -A celery_worker.main worker --autoscale 10 --loglevel=info
+    command: poetry run celery -A celery_worker.main worker --loglevel=info -Q instant,default -c 2
 
   notify-service-rabbitmq:
     image: rabbitmq:management
