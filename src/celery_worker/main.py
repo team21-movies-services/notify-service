@@ -16,6 +16,7 @@ app = Celery(
     "notify",
     broker="pyamqp://guest:guest@notify-service-rabbitmq",
     backend="rpc://guest:guest@notify-service-rabbitmq",
+    config_source='shared.config.celery_config',
     include=[
         "celery_worker.tasks.notifications",
     ],

@@ -11,6 +11,7 @@ class CeleryProvider(BaseProvider):
         self.celery_client = Celery(
             broker=settings.celery.broker,
             backend=settings.celery.backend,
+            config_source='shared.config.celery_config',
             app=settings.celery.app_name,
         )
 

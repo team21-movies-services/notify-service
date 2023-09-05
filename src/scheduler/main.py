@@ -14,6 +14,7 @@ CHECK_INTERVAL = settings.project.check_interval
 
 app = Celery(
     settings.celery.app_name,
+    config_source='shared.config.celery_config',
     broker=settings.celery.broker,
     backend=settings.celery.backend,
 )
