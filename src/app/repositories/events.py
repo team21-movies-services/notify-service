@@ -3,8 +3,9 @@ from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import select
-from src.shared.database.models.notification import Notification
-from src.shared.database.models.schedule import Schedule
+
+from shared.database.models.notification import Notification
+from shared.database.models.schedule import Schedule
 
 
 class EventsRepository:
