@@ -15,3 +15,29 @@ class PostgresConfig(BaseSettings):
     @property
     def database_url(self):
         return f"postgresql+psycopg://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"
+
+
+class UsersApiConfig(BaseSettings):
+    host: str = Field(default="https://d90746a7-1563-46ce-9a3d-8d173a6f8bda.mock.pstmn.io")
+
+    @property
+    def list_uri(self) -> str:
+        return self.host + "/api/v1/notifications/users/?event_name={event_name}"
+
+    @property
+    def info_uri(self) -> str:
+        return self.host + "/api/v1/notifications/users/?user_id={user_id}"
+
+
+class FilmsApiConfig(BaseSettings):
+    host: str = Field(default="https://d90746a7-1563-46ce-9a3d-8d173a6f8bda.mock.pstmn.io")
+
+    @property
+    def new_uri(self) -> str:
+        return self.host + "/api/v1/films/new?from_date={from_date}"
+
+
+# Настройки внешних API
+class APIsConfig(BaseSettings):
+    users: UsersApiConfig = UsersApiConfig()
+    films: FilmsApiConfig = FilmsApiConfig()

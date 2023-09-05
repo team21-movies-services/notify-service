@@ -1,13 +1,20 @@
 import uuid
+from enum import StrEnum, auto
 
 from sqlalchemy import PrimaryKeyConstraint, String, Text
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.dialects.postgresql import ENUM, JSONB, UUID
 from sqlalchemy.orm import Mapped, relationship
 
 from shared.database.models.base import BaseModel, Column, RestrictForeignKey
 from shared.database.models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
 from shared.database.models.sender import Sender
 from shared.database.models.wrapper import Wrapper
+
+
+class TemplateType(StrEnum):
+    email = auto()
+    push = auto()
+    sms = auto()
 
 
 class Template(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):
@@ -21,6 +28,13 @@ class Template(BaseModel, IdMixin, TsMixinCreated, TsMixinUpdated):
 
     name: Mapped[str] = Column(String(127), nullable=False, comment="Название шаблона")
     description: Mapped[str] = Column(String(255), nullable=False, comment="Описание шаблона")
+    template_type: Mapped[str] = Column(
+        ENUM(TemplateType, name="template_type"),
+        nullable=False,
+        comment="Типы шаблонов",
+        default=TemplateType.email,
+        server_default='email',
+    )
 
     subject: Mapped[str] = Column(String(127), nullable=True, comment="Заголовок шаблона")
     body: Mapped[str] = Column(Text, nullable=False, comment="Тело шаблона")

@@ -6,9 +6,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.sql import select
 
-from app.schemas.template import TemplateSchema
 from shared.database.models.template import Template
 from shared.exceptions.base import ObjectDoesNotExist
+from shared.schemas.template import TemplateSchema
 
 logger = logging.getLogger(__name__)
 
