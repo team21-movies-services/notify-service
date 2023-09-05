@@ -2,9 +2,9 @@ import logging
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from schemas.request.events import IncomingEvent
-from schemas.response.events import EventResponse
-from services.events import EventsServiceABC
+from app.schemas.request.events import IncomingEvent
+from app.schemas.response.events import EventResponse
+from app.services.events import EventsServiceABC
 
 router = APIRouter(prefix="/events", tags=["Events"])
 
