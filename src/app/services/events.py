@@ -2,9 +2,9 @@ from abc import ABC, abstractmethod
 
 from celery import Celery
 
-from core.exceptions.events import NotificationException
-from repositories.events import EventsRepository
-from schemas.request.events import IncomingEvent
+from app.core.exceptions.events import NotificationException
+from app.repositories.events import EventsRepository
+from app.schemas.request.events import IncomingEvent
 from shared.database.models.notification import NotificationType
 
 
