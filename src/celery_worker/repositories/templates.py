@@ -10,6 +10,9 @@ from shared.database.models.template import Template
 from shared.exceptions.base import ObjectDoesNotExist
 from shared.schemas.template import TemplateSchema
 
+from shared.database.models.template import Template
+from shared.exceptions.base import ObjectDoesNotExist
+
 logger = logging.getLogger(__name__)
 
 

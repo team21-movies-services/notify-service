@@ -8,7 +8,6 @@ from celery_worker.connectors import PGConnect, SyncPGConnect
 
 time.sleep(5)
 
-
 logger = logging.getLogger(__name__)
 
 
