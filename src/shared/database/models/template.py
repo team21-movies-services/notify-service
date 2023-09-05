@@ -5,10 +5,6 @@ from sqlalchemy import PrimaryKeyConstraint, String, Text
 from sqlalchemy.dialects.postgresql import ENUM, JSONB, UUID
 from sqlalchemy.orm import Mapped, relationship
 
-from sqlalchemy import PrimaryKeyConstraint, String, Text
-from sqlalchemy.dialects.postgresql import JSONB, UUID
-from sqlalchemy.orm import Mapped, relationship
-
 from shared.database.models.base import BaseModel, Column, RestrictForeignKey
 from shared.database.models.mixins import IdMixin, TsMixinCreated, TsMixinUpdated
 from shared.database.models.sender import Sender
