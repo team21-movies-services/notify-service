@@ -1,35 +1,40 @@
 import logging
 import time
-from uuid import UUID
 
 from celery import Celery
+from celery.signals import worker_process_init, worker_process_shutdown
 
-from celery_worker.connectors import SyncPGConnect
-from celery_worker.repositories import TemplatesRepository
+from celery_worker.connectors import PGConnect, SyncPGConnect
 
 time.sleep(5)
 
 
 logger = logging.getLogger(__name__)
 
-app = Celery(
-    "notify",
-    broker="pyamqp://guest:guest@notify-service-rabbitmq",
-    backend="rpc://guest:guest@notify-service-rabbitmq",
-    include=[
-        "celery_worker.tasks.notifications",
-    ],
-)
+
+def create_app() -> Celery:
+    app = Celery(
+        "notify",
+        broker="pyamqp://guest:guest@notify-service-rabbitmq",
+        backend="rpc://guest:guest@notify-service-rabbitmq",
+        include=[
+            "celery_worker.tasks.notifications",
+            "celery_worker.tasks.debug",
+            "celery_worker.tasks.template",
+        ],
+    )
+
+    return app
 
 
-@app.task(name="debug_task")
-def add(x):
-    return x
+app = create_app()
 
 
-@app.task(name="get_template")
-def get_template(template_id: UUID):
-    pg_connect = SyncPGConnect()
-    repository = TemplatesRepository(session=next(pg_connect.get_db_session()))
-    logger.info(repository.get(template_id))
-    pg_connect.close()
+@worker_process_init.connect
+def init_worker(**kwargs):
+    PGConnect.set(SyncPGConnect())
+
+
+@worker_process_shutdown.connect
+def shutdown_worker(**kwargs):
+    PGConnect.get().close()
