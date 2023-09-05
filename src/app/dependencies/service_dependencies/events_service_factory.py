@@ -17,6 +17,6 @@ celery_app = Celery(
 
 @add_factory_to_mapper(EventsServiceABC)
 def create_events_service(
-    session: AsyncSession = Depends(get_db_session), celery_app: Celery = celery_app
+    session: AsyncSession = Depends(get_db_session), celery_app: Celery = celery_app,
 ) -> EventsService:
     return EventsService(EventsRepository(session), celery_app)
