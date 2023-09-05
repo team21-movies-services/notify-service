@@ -1,4 +1,5 @@
 import logging
+from contextvars import ContextVar
 from typing import Generator
 
 from sqlalchemy import create_engine
@@ -35,3 +36,6 @@ class SyncPGConnect:
     def close(self) -> None:
         self._engine.dispose()
         logger.info("DB connection has closed")
+
+
+PGConnect: ContextVar[SyncPGConnect] = ContextVar('PGConnect')
