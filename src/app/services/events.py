@@ -10,7 +10,7 @@ from shared.database.models.notification import NotificationType
 
 class EventsServiceABC(ABC):
     @abstractmethod
-    async def handling_event(self, event_data: IncomingEvent):
+    async def handling_event(self, event_data: IncomingEvent) -> dict | None:
         raise NotImplementedError
 
 
@@ -27,8 +27,8 @@ class EventsService(EventsServiceABC):
 
         if notification.notification_type == NotificationType.scheduled:
             schedule_event = await self._event_repository.create_schedule_event(
-                event_data=event_data,
-                notification_id=notification.id,
+                event_data=event_data.model_dump(),
+                notification_id=str(notification.id),
             )
             schedule_event_data = {'notification_type': NotificationType.scheduled, 'schedule_event_id': schedule_event}
             return schedule_event_data
