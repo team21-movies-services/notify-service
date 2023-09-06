@@ -1,4 +1,5 @@
 import logging
+from contextlib import contextmanager
 from contextvars import ContextVar
 from typing import Generator
 
@@ -29,8 +30,9 @@ class SyncPGConnect:
     def get_session(self) -> Session:
         return self._Session()
 
+    @contextmanager
     def get_db_session(self) -> Generator[Session, None, None]:
-        with self._Session() as session:
+        with self.get_session() as session:
             yield session
 
     def close(self) -> None:

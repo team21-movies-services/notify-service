@@ -31,7 +31,7 @@ class NewFilmContentService(ContentServiceProtocol):
     _api: APIsConfig
 
     def get_content(self, event: EventSchema) -> ContentListSchema:
-        response = self._client.get(self._api.films.new_uri.format(date_after=event.event_time))
+        response = self._client.get(self._api.films.new_uri.format(from_date=event.event_time))
         return [FilmsInfoSchema(**film) for film in response.json()]
 
 
