@@ -21,4 +21,4 @@ async def get_ws_auth_data(
         return None, "FORBIDDEN"
     except TokenExpiredException:
         return None, "TOKEN EXPIRED"
-    return auth_data, "SUCESS"
+    return auth_data, "SUCCESS"
