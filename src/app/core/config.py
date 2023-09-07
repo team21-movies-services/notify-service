@@ -8,7 +8,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class ProjectConfig(BaseSettings):
     name: str = Field(default="notify_service_api", alias="PROJECT_NAME")
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
-    jwt_secret_key: str = Field(default="secret_key", alias="JWT_SECRET_KEY")
+    jwt_secret_key: str = Field(default="jwt_super_secret", alias="JWT_SECRET_KEY")
 
 
 # Настройки PostgreSQL

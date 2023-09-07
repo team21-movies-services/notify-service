@@ -48,4 +48,5 @@ class TemplatesRepository:
 
 
 def get_templates_repository(pg_connect: SyncPGConnect) -> TemplatesRepository:
-    return TemplatesRepository(session=next(pg_connect.get_db_session()))
+    with pg_connect.get_db_session() as _session:
+        return TemplatesRepository(session=_session)
