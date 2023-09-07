@@ -48,11 +48,26 @@ class AdminConfig(BaseSettings):
     debug: bool = Field(default=False)
 
 
+class AMPQConfig(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="AMPQ_")
+
+    user: str = Field(default="guest")
+    password: str = Field(default="guest")
+    host: str = Field(default="notify-service-rabbitmq")
+
+    queue_notify: str = Field(default="notify")
+
+    @property
+    def broker(self) -> str:
+        return f"amqp://{self.user}:{self.password}@{self.host}"
+
+
 class Settings(BaseSettings):
     project: ProjectConfig = ProjectConfig()
     postgres: PostgresConfig = PostgresConfig()
     celery: CeleryConfig = CeleryConfig()
     admin: AdminConfig = AdminConfig()
+    ampq: AMPQConfig = AMPQConfig()
 
 
 settings = Settings()
