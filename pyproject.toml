@@ -19,7 +19,7 @@ packages = [{ include = "notify_service" }]
 [tool.poetry.dependencies]
 python = "^3.10 || ^3.11"
 fastapi = "^0.103.0"
-pydantic = {extras = ["email"], version = "^2.3.0"}
+pydantic = { extras = ["email"], version = "^2.3.0" }
 pydantic-settings = "^2.0.3"
 uvicorn = "^0.23.2"
 orjson = "^3.9.5"
