@@ -47,9 +47,7 @@ class SentryConnector:
         self._dsn = config.dsn
 
     def start_sentry(self):
-        sentry_sdk.init(dsn=self._dsn,
-                        traces_sample_rate=1.0,
-                        profiles_sample_rate=1.0)
+        sentry_sdk.init(dsn=self._dsn, traces_sample_rate=1.0, profiles_sample_rate=1.0)
 
     def shutdown_sentry(self):
         client = sentry_sdk.Hub.current.client
