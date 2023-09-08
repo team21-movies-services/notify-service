@@ -34,6 +34,10 @@ class UsersApiConfig(BaseSettings):
     def info_uri(self) -> str:
         return self.host + "/api/v1/notifications/users/?user_id={user_id}"
 
+    @property
+    def get_confirmation_uri(self) -> str:
+        return self.host + "/api/v1/notifications/confirm/?user_id={user_id}"
+
 
 class FilmsApiConfig(BaseSettings):
     host: str = Field(default="https://d90746a7-1563-46ce-9a3d-8d173a6f8bda.mock.pstmn.io")
@@ -43,7 +47,17 @@ class FilmsApiConfig(BaseSettings):
         return self.host + "/api/v1/films/new?from_date={from_date}"
 
 
+class TinyUrlApiConfig(BaseSettings):
+    host: str = Field(default="https://api.tinyurl.com")
+    token: str = Field(default="ihDsRF83DjIczDPSS2e2ozKByQEd655xQFqFW4jG9v8vdQvEeXFh2pk3QH1j")
+
+    @property
+    def shortener_uri(self) -> str:
+        return self.host + "/create"
+
+
 # Настройки внешних API
 class APIsConfig(BaseSettings):
     users: UsersApiConfig = UsersApiConfig()
     films: FilmsApiConfig = FilmsApiConfig()
+    tinyurl: TinyUrlApiConfig = TinyUrlApiConfig()
