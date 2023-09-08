@@ -5,3 +5,4 @@ class NotificationTypesEnum(StrEnum):
     email = auto()
     push = auto()
     sms = auto()
+    websocket = auto()

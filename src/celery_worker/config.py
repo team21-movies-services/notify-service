@@ -80,9 +80,23 @@ class EmailProvidersConfig(BaseSettings):
         return self.host + "/send-email"
 
 
+class WebsocketProvidersConfig(BaseSettings):
+    user: str = Field(default="guest")
+    password: str = Field(default="guest")
+    host: str = Field(default="notify-service-rabbitmq")
+
+    queue_notify: str = Field(default="notify")
+    timeout: int = 60 * 60 * 24
+
+    @property
+    def broker(self) -> str:
+        return f"amqp://{self.user}:{self.password}@{self.host}"
+
+
 # Настройки внешних API
 class APIsConfig(BaseSettings):
     users: UsersApiConfig = UsersApiConfig()
     films: FilmsApiConfig = FilmsApiConfig()
     tinyurl: TinyUrlApiConfig = TinyUrlApiConfig()
     email_providers: EmailProvidersConfig = EmailProvidersConfig()
+    ws_provider: WebsocketProvidersConfig = WebsocketProvidersConfig()

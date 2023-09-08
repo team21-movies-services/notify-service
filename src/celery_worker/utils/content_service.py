@@ -4,7 +4,7 @@ from typing import Any, NoReturn, Protocol
 from requests import Session as RequestSession
 
 from celery_worker.config import APIsConfig
-from celery_worker.exceptions.events import EventCouldNotBeHandled
+from celery_worker.exceptions.events import CannotParseEventData, EventCouldNotBeHandled
 from celery_worker.schemas.content import (
     ConfirmationUrlSchema,
     ContentListSchema,
@@ -26,7 +26,10 @@ class UserCreatedContentService(ContentServiceProtocol):
     _url_shortener: UrlShortenerService
 
     def get_content(self, event: EventSchema) -> ContentListSchema:
-        long_url = self._api.users.get_confirmation_uri.format(event.event_data.user_id)
+        if not isinstance(event.event_data, EventUsersNewSchema):
+            raise CannotParseEventData
+
+        long_url = self._api.users.get_confirmation_uri.format(user_id=event.event_data.user_id)
         short_url = self._url_shortener.get_short_url(long_url)
         if short_url:
             return [ConfirmationUrlSchema(url=short_url)]
