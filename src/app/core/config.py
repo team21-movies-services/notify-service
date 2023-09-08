@@ -62,11 +62,18 @@ class AMPQConfig(BaseSettings):
         return f"amqp://{self.user}:{self.password}@{self.host}"
 
 
+# Настройки Sentry
+class SentryConfig(BaseSettings):
+    dsn: str = Field(default="dsn", alias='SENTRY_DSN')
+    enable: bool = Field(default=True, alias='SENTRY_ENABLE')
+
+
 class Settings(BaseSettings):
     project: ProjectConfig = ProjectConfig()
     postgres: PostgresConfig = PostgresConfig()
     celery: CeleryConfig = CeleryConfig()
     admin: AdminConfig = AdminConfig()
+    sentry: SentryConfig = SentryConfig()
     ampq: AMPQConfig = AMPQConfig()
 
 
