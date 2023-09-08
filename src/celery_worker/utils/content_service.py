@@ -26,7 +26,7 @@ class UserCreatedContentService(ContentServiceProtocol):
     _url_shortener: UrlShortenerService
 
     def get_content(self, event: EventSchema) -> ContentListSchema:
-        long_url = self._api.users.get_confirmation_link.format(event.event_data.user_id)
+        long_url = self._api.users.get_confirmation_uri.format(event.event_data.user_id)
         short_url = self._url_shortener.get_short_url(long_url)
         if short_url:
             return [ConfirmationUrlSchema(url=short_url)]
@@ -46,10 +46,12 @@ class NewFilmContentService(ContentServiceProtocol):
 def get_content_service(event: EventSchema) -> ContentServiceProtocol:
     client = RequestSession()
     api = APIsConfig()
+    url_shortener = UrlShortenerService(client, api)
 
     match event.event_data:
         case EventUsersNewSchema():  # type: ignore[misc]
-            return UserCreatedContentService(client, api)
+            # return UserCreatedContentService(client, api, )
+            return UserCreatedContentService(client, api, url_shortener)
         case EventFilmsNewSchema():  # type: ignore[misc]
             return NewFilmContentService(client, api)
         case _ as unreachable:
