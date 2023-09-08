@@ -4,18 +4,20 @@ import time
 from celery import Celery
 from celery.signals import worker_process_init, worker_process_shutdown
 
+from celery_worker.config import CeleryConfig
 from celery_worker.connectors import PGConnect, SentryConnector, SyncPGConnect
 
 time.sleep(5)
 
 logger = logging.getLogger(__name__)
+celery_config = CeleryConfig()
 
 
-def create_app() -> Celery:
+def create_app(config: CeleryConfig) -> Celery:
     app = Celery(
-        "notify",
-        broker="pyamqp://guest:guest@notify-service-rabbitmq",
-        backend="rpc://guest:guest@notify-service-rabbitmq",
+        config.app_name,
+        broker=config.broker,
+        backend=config.backend,
         config_source='shared.config.celery_config',
         include=[
             "celery_worker.tasks.notifications",
@@ -27,7 +29,7 @@ def create_app() -> Celery:
     return app
 
 
-app = create_app()
+app = create_app(celery_config)
 sentry_connect = SentryConnector()
 
 
