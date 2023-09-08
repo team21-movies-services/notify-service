@@ -10,7 +10,7 @@ from celery_worker.schemas.content import (
     ContentListSchema,
     FilmsInfoSchema,
 )
-from celery_worker.utils import UrlShortenerService
+from celery_worker.utils.url_shortener import UrlShortenerService
 from shared.schemas.events import EventFilmsNewSchema, EventSchema, EventUsersNewSchema
 
 
