@@ -2,6 +2,22 @@ from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+class CeleryConfig(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="CELERY_")
+    user: str = Field(default="guest")
+    password: str = Field(default="guest")
+    host: str = Field(default="notify-service-rabbitmq")
+    app_name: str = Field(default="notify")
+
+    @property
+    def broker(self) -> str:
+        return f"pyamqp://{self.user}:{self.password}@{self.host}"
+
+    @property
+    def backend(self) -> str:
+        return f"rpc://{self.user}:{self.password}@{self.host}"
+
+
 # Настройки Sentry
 class SentryConfig(BaseSettings):
     dsn: str = Field(default="dsn", alias='SENTRY_DSN')
