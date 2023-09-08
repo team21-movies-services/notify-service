@@ -2,6 +2,12 @@ from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+# Настройки Sentry
+class SentryConfig(BaseSettings):
+    dsn: str = Field(default="dsn", alias='SENTRY_DSN')
+    enable: bool = Field(default=True, alias='SENTRY_ENABLE')
+
+
 # Настройки PostgreSQL
 class PostgresConfig(BaseSettings):
     model_config = SettingsConfigDict(env_prefix='postgres_')
