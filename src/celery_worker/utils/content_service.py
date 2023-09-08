@@ -11,7 +11,6 @@ from celery_worker.schemas.content import (
     FilmsInfoSchema,
 )
 from celery_worker.utils.url_shortener import UrlShortenerService
-
 from shared.schemas.events import EventFilmsNewSchema, EventSchema, EventUsersNewSchema
 
 
