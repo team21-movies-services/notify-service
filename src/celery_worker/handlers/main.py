@@ -2,15 +2,13 @@ import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
+from jinja2 import DictLoader, Environment
 from requests import Session as RequestSession
-from celery_worker.config import APIsConfig
 
-from shared.schemas.template import TemplateSchema
+from celery_worker.config import APIsConfig
 from celery_worker.schemas.content import ContentListSchema
 from celery_worker.schemas.users import UserInfoSchema
-
-from jinja2 import DictLoader, Environment
-
+from shared.schemas.template import TemplateSchema
 
 logger = logging.getLogger(__name__)
 

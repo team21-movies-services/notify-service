@@ -2,14 +2,11 @@ import logging
 from dataclasses import dataclass
 
 from celery_worker.exceptions.handlers import HandlerHasntExistedYet
+from celery_worker.handlers.handlers_factory import HandlerFactoryProtocol
 from celery_worker.repositories import TemplatesRepository
 from celery_worker.schemas.content import ContentListSchema
 from celery_worker.schemas.users import UserInfoList
-from celery_worker.handlers.handlers_factory import HandlerFactoryProtocol
-from celery_worker.utils import (
-    ContentServiceProtocol,
-    UserServiceProtocol,
-)
+from celery_worker.utils import ContentServiceProtocol, UserServiceProtocol
 from shared.enums.notifications import NotificationTypesEnum
 from shared.exceptions.base import ObjectDoesNotExist
 from shared.schemas.events import EventSchema

@@ -1,8 +1,8 @@
 from typing import NoReturn, Protocol
 
 from celery_worker.exceptions.handlers import HandlerHasntExistedYet
+from celery_worker.handlers import EmailHandlers, HandlerABC
 from shared.enums.notifications import NotificationTypesEnum
-from celery_worker.handlers import HandlerABC, EmailHandlers
 
 
 class HandlerFactoryProtocol(Protocol):
