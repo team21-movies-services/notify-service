@@ -1,3 +1,5 @@
+from .auth_service_factory import create_auth_service
 from .events_service_factory import create_events_service
+from .queue_notify_service import create_queue_notify_service
 from .status_service_factory import create_status_service
 from .templates_service_factory import create_templates_service

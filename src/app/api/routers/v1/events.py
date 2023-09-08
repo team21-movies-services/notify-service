@@ -16,8 +16,8 @@ logger = logging.getLogger().getChild("events-router")
     summary="Обработка входящего события",
     response_model=EventResponse,
 )
-async def handling_event(event_data: IncomingEvent, status_service: EventsServiceABC = Depends()) -> EventResponse:
-    event = await status_service.handling_event(event_data=event_data)
+async def handling_event(event_data: IncomingEvent, event_service: EventsServiceABC = Depends()) -> EventResponse:
+    event = await event_service.handling_event(event_data=event_data)
     if not event:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

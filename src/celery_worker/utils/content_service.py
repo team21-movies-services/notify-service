@@ -11,6 +11,7 @@ from celery_worker.schemas.content import (
     FilmsInfoSchema,
 )
 from celery_worker.utils.url_shortener import UrlShortenerService
+
 from shared.schemas.events import EventFilmsNewSchema, EventSchema, EventUsersNewSchema
 
 
@@ -39,7 +40,7 @@ class NewFilmContentService(ContentServiceProtocol):
     _api: APIsConfig
 
     def get_content(self, event: EventSchema) -> ContentListSchema:
-        response = self._client.get(self._api.films.new_uri.format(date_after=event.event_time))
+        response = self._client.get(self._api.films.new_uri.format(from_date=event.event_time))
         return [FilmsInfoSchema(**film) for film in response.json()]
 
 

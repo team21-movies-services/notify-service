@@ -8,7 +8,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class ProjectConfig(BaseSettings):
     name: str = Field(default="notify_service_api", alias="PROJECT_NAME")
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
-    jwt_secret_key: str = Field(default="secret_key", alias="JWT_SECRET_KEY")
+    jwt_secret_key: str = Field(default="jwt_super_secret", alias="JWT_SECRET_KEY")
 
 
 # Настройки PostgreSQL
@@ -48,11 +48,33 @@ class AdminConfig(BaseSettings):
     debug: bool = Field(default=False)
 
 
+class AMPQConfig(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="AMPQ_")
+
+    user: str = Field(default="guest")
+    password: str = Field(default="guest")
+    host: str = Field(default="notify-service-rabbitmq")
+
+    queue_notify: str = Field(default="notify")
+
+    @property
+    def broker(self) -> str:
+        return f"amqp://{self.user}:{self.password}@{self.host}"
+
+
+# Настройки Sentry
+class SentryConfig(BaseSettings):
+    dsn: str = Field(default="dsn", alias='SENTRY_DSN')
+    enable: bool = Field(default=True, alias='SENTRY_ENABLE')
+
+
 class Settings(BaseSettings):
     project: ProjectConfig = ProjectConfig()
     postgres: PostgresConfig = PostgresConfig()
     celery: CeleryConfig = CeleryConfig()
     admin: AdminConfig = AdminConfig()
+    sentry: SentryConfig = SentryConfig()
+    ampq: AMPQConfig = AMPQConfig()
 
 
 settings = Settings()
