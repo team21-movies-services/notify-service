@@ -5,7 +5,12 @@ from requests import Session as RequestSession
 
 from celery_worker.config import APIsConfig
 from celery_worker.exceptions.events import EventCouldNotBeHandled
-from celery_worker.schemas.content import ContentListSchema, FilmsInfoSchema
+from celery_worker.schemas.content import (
+    ConfirmationUrlSchema,
+    ContentListSchema,
+    FilmsInfoSchema,
+)
+from celery_worker.utils import UrlShortenerService
 from shared.schemas.events import EventFilmsNewSchema, EventSchema, EventUsersNewSchema
 
 
@@ -18,11 +23,14 @@ class ContentServiceProtocol(Protocol):
 class UserCreatedContentService(ContentServiceProtocol):
     _client: RequestSession
     _api: APIsConfig
+    _url_shortener: UrlShortenerService
 
-    def get_content(self, _: EventSchema) -> ContentListSchema:
-        # ничего не возвращает но в будущем может пригодиться, если шаблон изменится (неудачная попытка в s.O.l.i.d)
-
-        return None
+    def get_content(self, event: EventSchema) -> ContentListSchema:
+        long_url = self._api.users.get_confirmation_link.format(event.event_data.user_id)
+        short_url = self._url_shortener.get_short_url(long_url)
+        if short_url:
+            return [ConfirmationUrlSchema(url=short_url)]
+        return [ConfirmationUrlSchema(url=long_url)]
 
 
 @dataclass

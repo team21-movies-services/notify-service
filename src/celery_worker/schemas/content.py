@@ -7,8 +7,12 @@ class FilmsInfoSchema(BaseModel):
     id: str
     title: str
     imdb_rating: float
-    descritpion: str
+    description: str
     preview: str
 
 
-ContentListSchema = Union[list[FilmsInfoSchema], None]
+class ConfirmationUrlSchema(BaseModel):
+    url: str
+
+
+ContentListSchema = Union[list[FilmsInfoSchema], list[ConfirmationUrlSchema], None]
