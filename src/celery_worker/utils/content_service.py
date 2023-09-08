@@ -50,7 +50,6 @@ def get_content_service(event: EventSchema) -> ContentServiceProtocol:
 
     match event.event_data:
         case EventUsersNewSchema():  # type: ignore[misc]
-            # return UserCreatedContentService(client, api, )
             return UserCreatedContentService(client, api, url_shortener)
         case EventFilmsNewSchema():  # type: ignore[misc]
             return NewFilmContentService(client, api)
