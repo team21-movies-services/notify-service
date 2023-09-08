@@ -48,6 +48,20 @@ class AdminConfig(BaseSettings):
     debug: bool = Field(default=False)
 
 
+class AMPQConfig(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="AMPQ_")
+
+    user: str = Field(default="guest")
+    password: str = Field(default="guest")
+    host: str = Field(default="notify-service-rabbitmq")
+
+    queue_notify: str = Field(default="notify")
+
+    @property
+    def broker(self) -> str:
+        return f"amqp://{self.user}:{self.password}@{self.host}"
+
+
 # Настройки Sentry
 class SentryConfig(BaseSettings):
     dsn: str = Field(default="dsn", alias='SENTRY_DSN')
@@ -60,6 +74,7 @@ class Settings(BaseSettings):
     celery: CeleryConfig = CeleryConfig()
     admin: AdminConfig = AdminConfig()
     sentry: SentryConfig = SentryConfig()
+    ampq: AMPQConfig = AMPQConfig()
 
 
 settings = Settings()

@@ -4,6 +4,7 @@ from fastapi import FastAPI
 
 from app.core.config import Settings
 from app.providers.admin_provider import AdminProvider
+from app.providers.ampq_provider import AMPQProvider
 from app.providers.celery_provider import CeleryProvider
 from app.providers.pg_providers import SQLAlchemyProvider
 from app.providers.sentry_provider import SentryProvider
@@ -36,3 +37,10 @@ def setup_providers(app: FastAPI, settings: Settings):
         sentry_provider = SentryProvider(app=app, dsn=settings.sentry.dsn)
         sentry_provider.register_events()
         logger.info("Setup Sentry Provider.")
+
+    ampq_provider = AMPQProvider(
+        app=app,
+        settings=settings.ampq,
+    )
+    ampq_provider.register_events()
+    logger.info("Setup AMPQ Provider")
