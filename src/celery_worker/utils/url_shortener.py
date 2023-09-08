@@ -24,7 +24,7 @@ class UrlShortenerService:
         body = result.json()
         match status:
             case HTTPStatus.OK:
-                return body.get('tiny_url')
+                return body.get('data').get('tiny_url')
             case _:
                 logger.error('Errors during making short url. List of errors: {}'.format(body.get('errors')))
                 return None
