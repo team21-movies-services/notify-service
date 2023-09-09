@@ -8,9 +8,10 @@ from sqlalchemy.exc import OperationalError
 from celery_worker.backend import NotifyBackend
 from celery_worker.connectors import PGConnect
 from celery_worker.exceptions.base import BaseCeleryException
+from celery_worker.handlers import HandlersFactory
 from celery_worker.main import app
 from celery_worker.repositories import get_templates_repository
-from celery_worker.utils import HandlersFactory, get_content_service, get_user_service
+from celery_worker.utils import get_content_service, get_user_service
 from shared.schemas.events import EventSchema
 from shared.types.events import EventDict
 

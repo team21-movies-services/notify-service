@@ -7,7 +7,7 @@ from celery.signals import worker_process_init, worker_process_shutdown
 from celery_worker.config import CeleryConfig
 from celery_worker.connectors import PGConnect, SentryConnector, SyncPGConnect
 
-time.sleep(5)
+time.sleep(2)
 
 logger = logging.getLogger(__name__)
 celery_config = CeleryConfig()

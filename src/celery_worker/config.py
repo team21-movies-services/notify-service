@@ -72,8 +72,17 @@ class TinyUrlApiConfig(BaseSettings):
         return self.host + "/create"
 
 
+class EmailProvidersConfig(BaseSettings):
+    host: str = Field(default="https://aaddb410-31ce-4f81-8ff2-d1d8114cfc6b.mock.pstmn.io")
+    token: str = Field(default="123456")
+
+    def send_email_uri(self):
+        return self.host + "/send-email"
+
+
 # Настройки внешних API
 class APIsConfig(BaseSettings):
     users: UsersApiConfig = UsersApiConfig()
     films: FilmsApiConfig = FilmsApiConfig()
     tinyurl: TinyUrlApiConfig = TinyUrlApiConfig()
+    email_providers: EmailProvidersConfig = EmailProvidersConfig()
