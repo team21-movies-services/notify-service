@@ -31,10 +31,9 @@ class TemplatesRepository:
             raise ObjectDoesNotExist
         return TemplateSchema.model_validate(db_obj)
 
-    def get_by_event_and_notify(self, event_name: str, template_type: str) -> TemplateSchema:
+    def get_by_event(self, event_name: str) -> TemplateSchema:
         query = (
             select(Template)
-            .where(Template.template_type == template_type)
             .join(Template.wrapper)
             .join(Template.sender)
             .join(Notification, and_(Notification.template_id == Template.id, Notification.event_name == event_name))

@@ -4,6 +4,8 @@ from celery_worker.exceptions.handlers import HandlerHasntExistedYet
 from celery_worker.handlers import EmailHandlers, HandlerABC
 from shared.enums.notifications import NotificationTypesEnum
 
+from .ws_handler import WebsocketHandler
+
 
 class HandlerFactoryProtocol(Protocol):
     @staticmethod
@@ -17,6 +19,8 @@ class HandlersFactory(HandlerFactoryProtocol):
         match event_type:
             case NotificationTypesEnum.email:
                 return EmailHandlers()
+            case NotificationTypesEnum.websocket:
+                return WebsocketHandler()
             # case NotificationTypesEnum.sms:
             #     return "sms handler"
             # case NotificationTypesEnum.push:
