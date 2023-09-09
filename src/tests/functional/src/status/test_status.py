@@ -6,7 +6,7 @@ import pytest
 @pytest.mark.parametrize(
     ("route", "params", "json", "expected_status"),
     [
-        ("/api/v1/status", None, None, HTTPStatus.NOT_FOUND),
+        ("/api/v1/status", None, None, HTTPStatus.OK),
         (
             "/api/v1/events",
             None,
@@ -15,7 +15,7 @@ import pytest
                 "event_name": "users.created",
                 "event_time": "123",
             },
-            HTTPStatus.NOT_FOUND,  # тут так пока пустая база
+            HTTPStatus.NOT_FOUND,
         ),
     ],
 )
