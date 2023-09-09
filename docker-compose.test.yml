@@ -1,0 +1,123 @@
+version: '3.8'
+
+services:
+
+  test-notify-service-api:
+    container_name: test-notify-service-api
+    build:
+      context: .
+      dockerfile: infra/backend-test/Dockerfile
+    depends_on:
+      test-notify-service-scheduler:
+        condition: service_started
+      test-notify-service-worker:
+        condition: service_started
+      test-notify-service-instant-worker:
+        condition: service_started
+    networks:
+      - test-notify-service-network
+    env_file:
+      - ./src/.env.test
+    command: poetry run pytest
+
+  test-notify-service-postgres:
+    image: postgres:13
+    container_name: test-notify-service-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - test-notify-service-network
+    env_file:
+      - ./.env
+    volumes:
+      - test_db_data:/var/lib/postgresql/data
+
+  test-notify-service-scheduler:
+    build:
+      context: .
+      dockerfile: infra/scheduler/Dockerfile
+    env_file:
+      - src/.env.test
+    networks:
+      - test-notify-service-network
+    depends_on:
+      test-notify-service-postgres:
+        condition: service_healthy
+      test-notify-service-rabbitmq:
+        condition: service_started
+    volumes:
+      - ./src/shared:/opt/app/shared
+
+  test-notify-service-instant-worker:
+    build:
+      context: .
+      dockerfile: infra/celery/Dockerfile
+    depends_on:
+      - test-notify-service-rabbitmq
+    networks:
+      - test-notify-service-network
+    env_file:
+      - ./src/.env.test
+    volumes:
+      - ./src/celery_worker:/opt/celery_worker
+      - ./src/shared:/opt/shared
+    command: poetry run celery -A celery_worker.main worker --loglevel=info -Q instant -c 2
+
+  test-notify-service-worker:
+    build:
+      context: .
+      dockerfile: infra/celery/Dockerfile
+    depends_on:
+      - test-notify-service-rabbitmq
+    networks:
+      - test-notify-service-network
+    env_file:
+      - ./src/.env.test
+    volumes:
+      - ./src/celery_worker:/opt/celery_worker
+      - ./src/shared:/opt/shared
+    command: poetry run celery -A celery_worker.main worker --loglevel=info -Q instant,default -c 2
+
+  test-notify-service-rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - 15672:15672
+    networks:
+      - test-notify-service-network
+
+  test-notify-service-migration:
+    container_name: test-notify-service-migration
+    build:
+      context: .
+      dockerfile: infra/backend/Dockerfile
+    networks:
+      - test-notify-service-network
+    depends_on:
+      test-notify-service-postgres:
+        condition: service_healthy
+    env_file:
+      - ./src/.env.test
+    command: poetry run alembic upgrade head
+    volumes:
+      - ./src/app:/opt/app
+      - ./src/shared:/opt/shared
+      - ./src/migrations:/opt/migrations
+      - ./src/alembic.ini:/opt/alembic.ini
+networks:
+  test-notify-service-network:
+    name: test-notify-service-network
+    external: true
+
+volumes:
+  test_db_data:

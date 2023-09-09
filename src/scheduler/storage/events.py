@@ -4,7 +4,7 @@ from typing import Generator
 
 import psycopg
 from croniter import croniter
-from psycopg.errors import OperationalError
+from psycopg.errors import OperationalError, UndefinedTable
 from psycopg.rows import class_row
 
 from core.config import Settings
@@ -13,7 +13,7 @@ from utils import gen_backoff
 
 logger = logging.getLogger(__name__)
 RETRY_INTERVAL = 10
-BACKOFF_EXCEPTIONS = (OperationalError,)
+BACKOFF_EXCEPTIONS = (OperationalError, UndefinedTable)
 
 
 class PostgresEventStorage:

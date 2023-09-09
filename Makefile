@@ -11,6 +11,10 @@ help: ## Help
 create_network:
 	@docker network create notify-service-network 2>/dev/null || echo "notify-service-network is up-to-date"
 
+create_test_network:
+	@docker network create test-notify-service-network 2>/dev/null || echo "test-notify-service-network is up-to-date"
+
+
 # prod start
 .PHONY: up
 up: create_network ## up services
@@ -68,3 +72,29 @@ restart-local: down-local up-local ## logs local services
 uninstall-local: ## uninstall local services
 	@docker-compose $(LOCAL_DOCKER_COMPOSES) down --remove-orphans --volumes
 # local end
+
+# test start
+.PHONY: up-test
+up-test: create_test_network ## up test services
+	@docker-compose -p test_notify_service -f docker-compose.test.yml up --build
+
+.PHONY: down-test
+down-test: ## down test services
+	@docker-compose -p test_notify_service -f docker-compose.test.yml down
+
+.PHONY: run-test
+run-test: create_test_network ## run and uninstall tests services
+	@docker-compose -p test_notify_service -f docker-compose.test.yml up --build
+
+.PHONY: build-test
+build-test: create_test_network
+	@docker-compose -p test_notify_service -f docker-compose.test.yml build --force-rm
+
+.PHONY: logs-test
+logs-test: ## logs test services
+	@docker-compose -p test_notify_service -f docker-compose.test.yml logs -f
+
+.PHONY: uninstall-test
+uninstall-test: ## uninstall test services
+	@docker-compose -p test_notify_service -f docker-compose.test.yml down --remove-orphans --volumes
+# test end
