@@ -2,7 +2,9 @@ import pytest_asyncio
 from aio_pika import connect
 from celery import Celery
 from httpx import AsyncClient
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from tests.app.functional.utils.create_notifications import create_notifications
 
 from app.core.config import settings
 from app.dependencies.clients.get_ampq_connection import get_ws_ampq_connection
@@ -20,6 +22,12 @@ async def db_session():
     async with session_maker() as session:
         yield session
     await engine.dispose()
+
+
+@pytest_asyncio.fixture(name="fill_db", scope="session")
+async def fill_db(db_session):
+    await db_session.execute(text(create_notifications))
+    await db_session.commit()
 
 
 @pytest_asyncio.fixture(name="celery", scope="session")
