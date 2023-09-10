@@ -83,8 +83,10 @@ down-test: ## down test services
 	@docker-compose -p test_notify_service -f docker-compose.test.yml down
 
 .PHONY: run-test
-run-test:
-	@docker-compose -p test_notify_service -f docker-compose.test.yml up -d --build
+run-test: create_test_network ## run and uninstall tests services
+	@docker-compose -p test_notify_service -f docker-compose.test.yml up --build -d
+	@docker-compose -f docker-compose.test.yml logs test_notify_service-api --follow
+	@docker-compose -f docker-compose.test.yml down --remove-orphans --volumes
 
 .PHONY: build-test
 build-test: create_test_network
@@ -92,12 +94,9 @@ build-test: create_test_network
 
 .PHONY: logs-test
 logs-test: ## logs test services
-	@docker-compose -p test_notify_service -f docker-compose.test.yml logs test-notify-service-api -f
+	@docker-compose -p test_notify_service -f docker-compose.test.yml logs -f
 
 .PHONY: uninstall-test
 uninstall-test: ## uninstall test services
 	@docker-compose -p test_notify_service -f docker-compose.test.yml down --remove-orphans --volumes
-
-.PHONY: all-test
-all-test:  run-test logs-test uninstall-test
 # test end
