@@ -84,6 +84,10 @@ down-test: ## down test services
 
 .PHONY: run-test
 run-test: create_test_network ## run and uninstall tests services
+	@docker-compose -p test_notify_service -f docker-compose.test.yml up --build
+
+.PHONY: run-test-d
+run-test-d: create_test_network ## run and uninstall tests services
 	@docker-compose -p test_notify_service -f docker-compose.test.yml up --build -d
 
 .PHONY: build-test
@@ -92,6 +96,10 @@ build-test: create_test_network
 
 .PHONY: logs-test
 logs-test: ## logs test services
+	@docker-compose -p test_notify_service -f docker-compose.test.yml logs -f
+
+.PHONY: pytest-logs
+pytest-logs:
 	@docker-compose -p test_notify_service -f docker-compose.test.yml logs test-notify-service-api -f
 
 .PHONY: uninstall-test
@@ -99,5 +107,5 @@ uninstall-test: ## uninstall test services
 	@docker-compose -p test_notify_service -f docker-compose.test.yml down --remove-orphans --volumes
 
 .PHONY: all-test
-all-test: run-test logs-test uninstall-test
+all-test: run-test-d pytest-logs uninstall-test
 # test end
