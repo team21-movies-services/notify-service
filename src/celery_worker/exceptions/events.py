@@ -7,3 +7,7 @@ class EventCouldNotBeHandled(BaseCeleryException):
 
 class CantGetUserIdException(BaseCeleryException):
     """Can't get user_id"""
+
+
+class CannotParseEventData(BaseCeleryException):
+    """Event data cannot be parsed"""
