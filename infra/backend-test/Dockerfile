@@ -36,6 +36,8 @@ RUN poetry install --no-root --without dev
 COPY ./src/app $APP_DIR
 COPY ./src/shared $SHARED_DIR
 COPY ./src/tests $TESTS_DIR
+COPY ./src/celery_worker $SRC_DIR/celery_worker
+COPY ./src/scheduler $SRC_DIR/scheduler
 COPY ./src/gunicorn.conf.py $APP_DIR
 
 EXPOSE 8000
