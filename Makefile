@@ -92,7 +92,7 @@ build-test: create_test_network
 
 .PHONY: logs-test
 logs-test: ## logs test services
-	@docker-compose -p test_notify_service -f docker-compose.test.yml logs -f
+	@docker-compose -p test_notify_service -f docker-compose.test.yml logs test-notify-service-api -f
 
 .PHONY: uninstall-test
 uninstall-test: ## uninstall test services
