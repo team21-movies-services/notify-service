@@ -5,6 +5,8 @@ import pytest
 pytest_plugins = (
     "tests.app.functional.plugins.api_client",
     "tests.app.functional.plugins.ws_client",
+    "tests.app.functional.plugins.auth_tokens",
+    "tests.app.functional.plugins.auth_user",
 )
 
 
